@@ -52,9 +52,8 @@ class GroceryListTableViewController: UITableViewController {
     navigationItem.leftBarButtonItem = userCountBarButtonItem
     
     user = User(uid: "FakeId", email: "test@test.com")
-    
     //Server Data Load
-    queryforServer("completed")
+    //queryforServer("completed")
   }
   
   // MARK: UITableView Delegate methods
@@ -93,22 +92,23 @@ class GroceryListTableViewController: UITableViewController {
     let value:[String:Any] = ["completed": toggledCompletion]
     let itemRefer = childRefer.child(cell.textLabel!.text!)
     
-    itemRefer.ref.updateChildValues(value)
     toggleCellCheckbox(cell, isCompleted: toggledCompletion)
     items[indexPath.row].completed = toggledCompletion
-    
+    itemRefer.ref.updateChildValues(value)
     tableView.reloadData()
   }
   
   func toggleCellCheckbox(_ cell: UITableViewCell, isCompleted: Bool) {
     if !isCompleted {
       cell.accessoryType = .none
+      cell.backgroundColor = UIColor.white
       cell.textLabel?.textColor = UIColor.black
-      cell.detailTextLabel?.textColor = UIColor.green
+      cell.detailTextLabel?.textColor = UIColor.black
     } else {
       cell.accessoryType = .checkmark
-      cell.textLabel?.textColor = UIColor.gray
-      cell.detailTextLabel?.textColor = UIColor.blue
+      cell.backgroundColor = UIColor.yellow
+      cell.textLabel?.textColor = UIColor.red
+      cell.detailTextLabel?.textColor = UIColor.red
     }
   }
   
@@ -126,11 +126,10 @@ class GroceryListTableViewController: UITableViewController {
                                     addedByUser: self.user.email,
                                     completed: false)
       self.items.append(groceryItem)
-      print(self.items)
       
       //Upload the new Item
       let itemRefer = self.childRefer.child(textField.text!)
-      let value:[String:Any] = ["name": self.user.uid, "addedByUser": self.user.email, "completed": false]
+      let value:[String:Any] = ["name": textField.text!, "addedByUser": self.user.email, "completed": false]
       itemRefer.setValue(value)
       
       self.tableView.reloadData()
