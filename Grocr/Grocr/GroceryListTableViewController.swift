@@ -54,6 +54,20 @@ class GroceryListTableViewController: UITableViewController {
     user = User(uid: "FakeId", email: "test@test.com")
     //Server Data Load
     //queryforServer("completed")
+
+    
+    childRefer.queryOrdered(byChild: "completed").observe(.value) {
+      (dataSnapshot) in
+      var returnItem: [GroceryItem] = []
+      
+      for item in dataSnapshot.children {
+        let dnItem = GroceryItem(snapshot: item as! DataSnapshot)
+        returnItem.append(dnItem)
+      }
+      self.items = returnItem
+      print(self.items)
+      self.tableView.reloadData()
+    }
   }
   
   // MARK: UITableView Delegate methods
@@ -151,17 +165,20 @@ class GroceryListTableViewController: UITableViewController {
   }
   
   func queryforServer(_ childName: String){
-    var returnItem: [GroceryItem] = []
+    print("Called Query Func")
     
-    childRefer.queryOrdered(byChild: childName).observe(.value) {
-      (dataSnapshot) in
-      for item in dataSnapshot.children {
-        let dnItem = GroceryItem(snapshot: item as! DataSnapshot)
-        returnItem.append(dnItem)
-      }
-      self.items = returnItem
-    }
-    self.tableView.reloadData()
+//    var returnItem: [GroceryItem] = []
+//
+//    childRefer.queryOrdered(byChild: childName).observe(.value) {
+//      (dataSnapshot) in
+//      for item in dataSnapshot.children {
+//        let dnItem = GroceryItem(snapshot: item as! DataSnapshot)
+//        returnItem.append(dnItem)
+//      }
+//      self.items = returnItem
+//      print(self.items)
+//    }
+//    self.tableView.reloadData()
   }
   
 }//End Of The Class
