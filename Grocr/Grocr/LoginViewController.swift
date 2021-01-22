@@ -23,6 +23,7 @@
 import UIKit
 import Firebase
 
+
 class LoginViewController: UIViewController {
   
   // MARK: Constants
@@ -33,26 +34,6 @@ class LoginViewController: UIViewController {
   @IBOutlet weak var textFieldLoginPassword: UITextField!
   
   override func viewDidLoad() {
-    
-    let rootRef = Database.database().reference()
-    let childRef = Database.database().reference(withPath: "grocery-items")
-    let itemsRef = rootRef.child("grocery-items")
-    let milkRef = itemsRef.child("milk")
-    
-    print(rootRef.key)
-    print(childRef.key)
-    print(itemsRef.key)
-    print(milkRef.key)
-    
-//    let listerener = Auth.auth().addStateDidChangeListener {
-//      auth, user in
-//      print("listener")
-//      if user != nil {
-//        self.performSegue(withIdentifier: self.loginToList, sender: nil)
-//      }
-//    }
-//
-//    Auth.auth().removeStateDidChangeListener(listerener)
     
   }
   
@@ -69,39 +50,29 @@ class LoginViewController: UIViewController {
     
     let saveAction = UIAlertAction(title: "Save",
                                    style: .default) { action in
-      let emailTxt = alert.textFields![0]
-      let passTxt = alert.textFields![1]
-      Auth.auth().createUser(withEmail: emailTxt.text!, password: passTxt.text!) {
+      let emailTxt = alert.textFields![0].text
+      let passwordText = alert.textFields![1].text
+      
+      //call Firebase Auth
+      Auth.auth().createUser(withEmail: emailTxt!, password: passwordText!) {
         (user, error) in
         if error != nil {
-          if let errorCode = AuthErrorCode(rawValue: error!._code){
-            switch errorCode {
-            case .weakPassword:
-              print("Please provide a strong password")
-            default:
-              print("There is an error")
+          print(error!.localizedDescription)
+        }
+        print("Success to created a account: \(user!)")
+        if user != nil {
+          Auth.auth().signIn(withEmail: emailTxt!, password: passwordText!) {
+            (user, error) in
+            if error != nil {
+              print(error!.localizedDescription)
             }
+            print("Success to access the Firebase")
+            self.performSegue(withIdentifier: self.loginToList, sender: nil)
+            
+            
           }
         }
-        Auth.auth().signIn(withEmail: emailTxt.text!, password: passTxt.text!) {
-          user, error in
-          if error != nil {
-            print("Login Failed: \(error?.localizedDescription)")
-          }
-          self.performSegue(withIdentifier: self.loginToList, sender: nil)
-          print("Login Success")
-        }
-        
-        //        if user != nil {
-        //          user?.sendEmailVerification(completion: {
-        //            error in
-        //            if error != nil {
-        //              print(error?.localizedDescription)
-        //            }
-        //          })
-        //        }
       }
-      
     }
     
     let cancelAction = UIAlertAction(title: "Cancel",

@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		21DF91D0257F8A1C0026A985 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21DF91CF257F8A1C0026A985 /* GoogleService-Info.plist */; };
+		2100284225B1922C00EF92C2 /* TableViewCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2100284125B1922C00EF92C2 /* TableViewCellController.swift */; };
+		2100285B25B583D600EF92C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2100285A25B583D600EF92C2 /* GoogleService-Info.plist */; };
+		219C6FE325BAC5D40033DAA6 /* image in Resources */ = {isa = PBXBuildFile; fileRef = 219C6FE225BAC5D40033DAA6 /* image */; };
+		21ACE99A25A8548F00267CE4 /* Archive in Resources */ = {isa = PBXBuildFile; fileRef = 21ACE99925A8548F00267CE4 /* Archive */; };
+		21DF9EAE25B975A000652BFA /* PopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DF9EAD25B9759F00652BFA /* PopUpController.swift */; };
 		78B5021D1C012B5DA0C0915F /* libPods-Grocr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 936207261B39637B497B02C5 /* libPods-Grocr.a */; };
 		BB2385621B3DD5AB0079CD01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2385611B3DD5AB0079CD01 /* AppDelegate.swift */; };
 		BB2385641B3DD5AB0079CD01 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2385631B3DD5AB0079CD01 /* LoginViewController.swift */; };
@@ -21,7 +25,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		21DF91CF257F8A1C0026A985 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2100284125B1922C00EF92C2 /* TableViewCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellController.swift; sourceTree = "<group>"; };
+		2100285A25B583D600EF92C2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../../../../../Downloads/기타/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		219976DC25AD92CB00C144F4 /* images-3.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "images-3.jpeg"; sourceTree = "<group>"; };
+		219C6FE225BAC5D40033DAA6 /* image */ = {isa = PBXFileReference; lastKnownFileType = folder; path = image; sourceTree = "<group>"; };
+		219C6FE825BACE540033DAA6 /* add-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-1.png"; sourceTree = "<group>"; };
+		219C6FEA25BACE8E0033DAA6 /* users.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = users.png; sourceTree = "<group>"; };
+		21ACE99925A8548F00267CE4 /* Archive */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Archive; sourceTree = "<group>"; };
+		21DF9EAD25B9759F00652BFA /* PopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpController.swift; sourceTree = "<group>"; };
 		936207261B39637B497B02C5 /* libPods-Grocr.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Grocr.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3FB74BEB799C414C22E1803 /* Pods-Grocr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grocr.release.xcconfig"; path = "Pods/Target Support Files/Pods-Grocr/Pods-Grocr.release.xcconfig"; sourceTree = "<group>"; };
 		BB23855C1B3DD5AB0079CD01 /* Grocr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Grocr.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,6 +105,8 @@
 				BB2385811B3DD8310079CD01 /* Controllers */,
 				BB2385821B3DD8490079CD01 /* Layouts */,
 				BB2385681B3DD5AB0079CD01 /* Images.xcassets */,
+				219976DC25AD92CB00C144F4 /* images-3.jpeg */,
+				21ACE99925A8548F00267CE4 /* Archive */,
 				BB7DA5121B42CA790018B530 /* Other */,
 				BB23855F1B3DD5AB0079CD01 /* Supporting Files */,
 			);
@@ -103,8 +116,10 @@
 		BB23855F1B3DD5AB0079CD01 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				219C6FE825BACE540033DAA6 /* add-1.png */,
+				219C6FE225BAC5D40033DAA6 /* image */,
 				BB2385601B3DD5AB0079CD01 /* Info.plist */,
-				21DF91CF257F8A1C0026A985 /* GoogleService-Info.plist */,
+				2100285A25B583D600EF92C2 /* GoogleService-Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -114,7 +129,10 @@
 			children = (
 				BB2385631B3DD5AB0079CD01 /* LoginViewController.swift */,
 				BB2385831B3DD8660079CD01 /* GroceryListTableViewController.swift */,
+				2100284125B1922C00EF92C2 /* TableViewCellController.swift */,
 				BB30CD491B439B60004B3177 /* OnlineUsersTableViewController.swift */,
+				21DF9EAD25B9759F00652BFA /* PopUpController.swift */,
+				219C6FEA25BACE8E0033DAA6 /* users.png */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -156,6 +174,7 @@
 				BB2385581B3DD5AB0079CD01 /* Sources */,
 				BB2385591B3DD5AB0079CD01 /* Frameworks */,
 				BB23855A1B3DD5AB0079CD01 /* Resources */,
+				433108E703CB1BA2F6B2C41C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -215,16 +234,36 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				219C6FE325BAC5D40033DAA6 /* image in Resources */,
 				BB2385671B3DD5AB0079CD01 /* Main.storyboard in Resources */,
-				21DF91D0257F8A1C0026A985 /* GoogleService-Info.plist in Resources */,
 				BB23856C1B3DD5AB0079CD01 /* LaunchScreen.xib in Resources */,
 				BB2385691B3DD5AB0079CD01 /* Images.xcassets in Resources */,
+				21ACE99A25A8548F00267CE4 /* Archive in Resources */,
+				2100285B25B583D600EF92C2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		433108E703CB1BA2F6B2C41C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Grocr/Pods-Grocr-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/gRPC-C++/gRPCCertificates-Cpp.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/gRPCCertificates-Cpp.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Grocr/Pods-Grocr-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		EC2444EFA6CF69487F195EE6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -250,12 +289,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21DF9EAE25B975A000652BFA /* PopUpController.swift in Sources */,
 				BB2385641B3DD5AB0079CD01 /* LoginViewController.swift in Sources */,
 				BB2385841B3DD8660079CD01 /* GroceryListTableViewController.swift in Sources */,
 				BB23858A1B3DD9640079CD01 /* GroceryItem.swift in Sources */,
 				BB30CD4A1B439B60004B3177 /* OnlineUsersTableViewController.swift in Sources */,
 				BB7DA5111B42C8100018B530 /* User.swift in Sources */,
 				BB2385621B3DD5AB0079CD01 /* AppDelegate.swift in Sources */,
+				2100284225B1922C00EF92C2 /* TableViewCellController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,7 +431,7 @@
 				DEVELOPMENT_TEAM = KRST987SET;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Grocr/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = rw.firebasestudy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -400,7 +441,7 @@
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -416,7 +457,7 @@
 				DEVELOPMENT_TEAM = KRST987SET;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Grocr/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = rw.firebasestudy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -424,7 +465,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
