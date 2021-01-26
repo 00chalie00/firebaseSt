@@ -25,12 +25,45 @@ class PopUController: UIViewController {
     poupView.backgroundColor = UIColor.lightGray
     productTxtFLD.text = "Please Fill in product Information"
     productTxtFLD.textColor = .black
-    productIMG.backgroundColor = UIColor.green
+    productIMG.backgroundColor = UIColor.white
     productIMG.image = UIImage(named: "users.png")
-    
     
   }
   
+  @IBAction func imgBTNPressed(_ sender: UIButton) {
+    print("Button Pressed")
+    let alert = UIAlertController(title: "Photo", message: "Please select Image Souce", preferredStyle: .alert)
+    let actionCamrea = UIAlertAction(title: "Camera", style: .default) { action in
+      print("Camera Pressed")
+      let picker = UIImagePickerController()
+      picker.sourceType = .camera
+      picker.delegate = self
+      self.present(picker, animated: true, completion: nil)
+    }
+    let actionLibrary = UIAlertAction(title: "Library", style: .default) { action in
+      print("Library Pressed")
+      let picker = UIImagePickerController()
+      picker.sourceType = .photoLibrary
+      picker.delegate = self
+      self.present(picker, animated: true, completion: nil)
+    }
+    
+    alert.addAction(actionCamrea)
+    alert.addAction(actionLibrary)
+    present(alert, animated: true, completion: nil)
+  }
   
 }//End Of The Class
+
+
+extension PopUController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+  
+  
+  func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    if let selectedIMG = info[.originalImage] as? UIImage {
+      productIMG.image = selectedIMG
+      self.dismiss(animated: true, completion: nil)
+    }
+  }
+}
 
