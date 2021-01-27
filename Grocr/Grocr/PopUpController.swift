@@ -21,8 +21,18 @@ class PopUController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    productName.delegate = self
+    productPrice.delegate = self
+    productTxtFLD.delegate = self
+    
     view.backgroundColor = UIColor.white
     poupView.backgroundColor = UIColor.lightGray
+    
+    productName.attributedPlaceholder = NSAttributedString(string: "name", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+    productPrice.attributedPlaceholder = NSAttributedString(string: "price", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+    
+    productTxtFLD.backgroundColor = UIColor.white
+    
     productTxtFLD.text = "Please Fill in product Information"
     productTxtFLD.textColor = .black
     productIMG.backgroundColor = UIColor.white
@@ -67,3 +77,36 @@ extension PopUController: UINavigationControllerDelegate, UIImagePickerControlle
   }
 }
 
+extension PopUController: UITextFieldDelegate {
+  
+  func textFieldDidBeginEditing(_ textField: UITextField) {
+    textField.placeholder = ""
+    textField.textColor = UIColor.black
+  }
+  
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    textField.resignFirstResponder()
+    return true
+  }
+  
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    if (self.productName.isFirstResponder || self.productPrice.isFirstResponder) {
+      self.productName.resignFirstResponder()
+      self.productPrice.resignFirstResponder()
+    }
+  }
+}
+
+extension PopUController: UITextViewDelegate {
+  
+  func textViewDidBeginEditing(_ textView: UITextView) {
+    textView.text = ""
+    textView.textColor = .black
+  }
+  
+  override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    if (self.productTxtFLD.isFirstResponder) {
+      self.productTxtFLD.resignFirstResponder()
+    }
+  }
+}
