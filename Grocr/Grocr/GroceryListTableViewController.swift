@@ -53,7 +53,8 @@ class GroceryListTableViewController: UITableViewController {
     
     user = User(uid: "FakeId", email: "test@test.com")
     //Server Data Load
-    //queryforServer("completed")
+    queryforServer("completed")
+    
   }
   
   // MARK: UITableView Delegate methods
