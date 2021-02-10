@@ -69,8 +69,8 @@ class GroceryListTableViewController: UITableViewController {
     let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! CellController
     let groceryItem = items[indexPath.row]
     cell.IMG.image = UIImage(named: "person.circle")
-      cell.name.text = groceryItem.name
-      cell.addUser.text = groceryItem.addedByUser
+      //cell.name.text = groceryItem.name
+      //cell.addUser.text = groceryItem.addedByUser
     return cell
   }
   
@@ -89,14 +89,13 @@ class GroceryListTableViewController: UITableViewController {
     guard let cell = tableView.cellForRow(at: indexPath) else { return }
     
     let groceryItem = items[indexPath.row]
-    let toggledCompletion = !groceryItem.completed
+    // ㅠlet toggledCompletion = !groceryItem.completed
     
-    let value:[String:Any] = ["completed": toggledCompletion]
-    let itemRefer = childRefer.child(cell.textLabel!.text!)
+    //let value:[String:Any] = ["completed": toggledCompletion]
+    //let itemRefer = childRefer.child(cell.textLabel!.text!)
     
-    toggleCellCheckbox(cell, isCompleted: toggledCompletion)
-    items[indexPath.row].completed = toggledCompletion
-    itemRefer.ref.updateChildValues(value)
+    //toggleCellCheckbox(cell, isCompleted: toggledCompletion)
+    //itemRefer.ref.updateChildValues(value)
     tableView.reloadData()
   }
   
