@@ -34,9 +34,9 @@ class GroceryListTableViewController: UITableViewController {
   var userCountBarButtonItem: UIBarButtonItem!
   
   var firebaseReference = Database.database().reference()
-  let childRefer = Database.database().reference(withPath: "chaile's grocery")
+  let childRefer = Database.database().reference(withPath: "Market Price")
   
-  let storageRef = Storage.storage().reference()
+  let storageRef = Storage.storage().reference(withPath: "Market Price")
   
   // MARK: UIViewController Lifecycle
   
@@ -53,50 +53,37 @@ class GroceryListTableViewController: UITableViewController {
     navigationItem.leftBarButtonItem = userCountBarButtonItem
     
     user = User(uid: "FakeId", email: "test@test.com")
+    
+    NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name: Notification.Name("newDataNoti"), object: nil)
+    
     //Server Data Load
-    queryforServer("completed")
+    queryforServer("complete")
+  }
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    self.items = []
+    self.tableView.reloadData()
+    queryforServer("complete")
+    self.tableView.reloadData()
+    print("Will")
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
     
-    uploadPicture()
+    self.items = []
+    self.tableView.reloadData()
+    queryforServer("complete")
+    self.tableView.reloadData()
+    print("Did")
   }
   
-  // MARK: UITableView Delegate methods
-  
-  override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return items.count
-  }
-  
-  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! CellController
-    let groceryItem = items[indexPath.row]
-    cell.IMG.image = UIImage(named: "person.circle")
-      //cell.name.text = groceryItem.name
-      //cell.addUser.text = groceryItem.addedByUser
-    return cell
-  }
-  
-  override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-    return true
-  }
-  
-  override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-    if editingStyle == .delete {
-      items.remove(at: indexPath.row)
-      tableView.reloadData()
-    }
-  }
-  
-  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    guard let cell = tableView.cellForRow(at: indexPath) else { return }
-    
-    let groceryItem = items[indexPath.row]
-    // ㅠlet toggledCompletion = !groceryItem.completed
-    
-    //let value:[String:Any] = ["completed": toggledCompletion]
-    //let itemRefer = childRefer.child(cell.textLabel!.text!)
-    
-    //toggleCellCheckbox(cell, isCompleted: toggledCompletion)
-    //itemRefer.ref.updateChildValues(value)
-    tableView.reloadData()
+  @objc func refresh() {
+    self.items = []
+    queryforServer("complete")
+    self.tableView.reloadData()
+    print("NOTI")
   }
   
   func toggleCellCheckbox(_ cell: UITableViewCell, isCompleted: Bool) {
@@ -117,45 +104,7 @@ class GroceryListTableViewController: UITableViewController {
   
   @IBAction func addButtonDidTouch(_ sender: AnyObject) {
     let popUpVC = storyboard?.instantiateViewController(identifier: "PopUpController") as? PopUController
-    
     present(popUpVC!, animated: true, completion: nil)
-    
-    
-//    let alert = UIAlertController(title: "Grocery Item",
-//                                  message: "Add an Item",
-//                                  preferredStyle: .alert)
-//
-//    let saveAction = UIAlertAction(title: "Save",
-//                                   style: .default) { action in
-//      let textField = alert.textFields![0]
-//      let groceryItem = GroceryItem(name: textField.text!,
-//                                    addedByUser: self.user.email,
-//                                    completed: false)
-//      self.items.append(groceryItem)
-//
-//      //Upload the new Item
-//      let itemRefer = self.childRefer.child(textField.text!)
-//      let value:[String:Any] = ["name": textField.text!, "addedByUser": self.user.email, "completed": false]
-//      itemRefer.setValue(value)
-//
-//      self.tableView.reloadData()
-//    }
-//
-//    let cancelAction = UIAlertAction(title: "Cancel",
-//                                     style: .default)
-//    //add imageview in alert
-//    var imageView = UIImageView(frame: CGRect(x: 50, y: 50, width: 40, height: 40))
-//    imageView.backgroundColor = .green
-//    alert.view.addSubview(imageView)
-//
-//
-//    alert.addTextField()
-//
-//
-//    alert.addAction(saveAction)
-//    alert.addAction(cancelAction)
-//
-//    present(alert, animated: true, completion: nil)
   }
   
   @objc func userCountButtonDidTouch() {
@@ -174,38 +123,62 @@ class GroceryListTableViewController: UITableViewController {
         returnItem.append(dnItem)
       }
       self.items = returnItem
+      print("\(returnItem[0].productName)")
       self.tableView.reloadData()
-    }
-  }
-  
-  func uploadPicture(){
-    let localFile = UIImage(named: "images-3.jpeg")
-    let uploadRef = storageRef.child("upload Image.jpg")
-    let imageData = localFile!.jpegData(compressionQuality: 1.0)
-    uploadRef.putData(imageData!, metadata: nil) {
-      meta, error in
-      if error != nil {
-        print(error?.localizedDescription)
-      }
     }
   }
   
   @IBAction func itemIMGSetting(_ sender: UIButton) {
     print("pushed Img Btn")
-    let sourceType: UIImagePickerController.SourceType = .camera
-    if UIImagePickerController.isSourceTypeAvailable(.camera) {
-      let cameraPicker = UIImagePickerController()
-      cameraPicker.sourceType = sourceType
-      cameraPicker.delegate = self
-      self.present(cameraPicker, animated: true, completion: nil)
-    } else {
-      let alert = UIAlertController(title: "Camera Error", message: "Your Camera Device is Error", preferredStyle: .alert)
-      present(alert, animated: true, completion: nil)
-    }
+  }
+  
+  
+  // MARK: UITableView Delegate methods
+  
+  override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    print(items.count)
+    return items.count
+  }
+  
+  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath) as! CellController
+    let groceryItem = items[indexPath.row]
+       //cell.IMG.image = UIImage(named: "person.circle")
+      //cell.name.text = groceryItem.name
+      //cell.addUser.text = groceryItem.addedByUser
     
+    cell.name.text = groceryItem.productName
+    cell.price.text = String(groceryItem.price)
+    cell.IMG.image = UIImage(named: "users.png")
+    
+    return cell
+  }
+  
+  override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    return true
+  }
+  
+  override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    if editingStyle == .delete {
+      items.remove(at: indexPath.row)
+      tableView.reloadData()
+    }
+  }
+  
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    guard let cell = tableView.cellForRow(at: indexPath) else { return }
+    let groceryItem = items[indexPath.row]
+    // let toggledCompletion = !groceryItem.completed
+    //let value:[String:Any] = ["completed": toggledCompletion]
+    //let itemRefer = childRefer.child(cell.textLabel!.text!)
+    //toggleCellCheckbox(cell, isCompleted: toggledCompletion)
+    //itemRefer.ref.updateChildValues(value)
+    tableView.reloadData()
   }
   
 }//End Of The Class
+
+
 
 // MARK: UIPickerController Extenstion
 extension GroceryListTableViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
@@ -214,9 +187,5 @@ extension GroceryListTableViewController: UINavigationControllerDelegate, UIImag
     if let pickedImg = info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage {
       
     }
-    
   }
-  
-  
-  
 }

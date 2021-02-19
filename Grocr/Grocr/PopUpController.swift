@@ -26,29 +26,17 @@ class PopUController: UIViewController {
   var user: User!
   var tempIMG: UIImageView?
   
-  var compressionQueue = OperationQueue()
-  
   var firebaseRef = Database.database().reference()
   var childRef = Database.database().reference(withPath: "Market Price")
-  var storageRef = Storage.storage().reference()
-  
+  var storageRef = Storage.storage().reference(withPath: "Market Price")
   
   override func viewDidLoad() {
-    productIMG.image = UIImage(named: "users.png")
+    super.viewDidLoad()
     productName.delegate = self
     productPrice.delegate = self
     productTxtFLD.delegate = self
     
     defaultValue()
-    
-  }
-  
-  override func viewDidAppear(_ animated: Bool) {
-//    super.viewDidAppear(animated)
-    print("viewDidAppear")
-    updateIMG()
-    self.poupView.setNeedsLayout()
-    self.poupView.layoutIfNeeded()
   }
   
   @IBAction func imgBTNPressed(_ sender: UIButton) {
@@ -75,17 +63,19 @@ class PopUController: UIViewController {
   }
   
   func defaultValue() {
-    view.backgroundColor = UIColor.white
-    poupView.backgroundColor = UIColor.lightGray
+    //view.backgroundColor = #colorLiteral(red: 0.9921568627, green: 1, blue: 0.737254902, alpha: 1)
+    poupView.backgroundColor = #colorLiteral(red: 1, green: 0.9333333333, blue: 0.7333333333, alpha: 1)
     
     productName.attributedPlaceholder = NSAttributedString(string: "name", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
     productPrice.attributedPlaceholder = NSAttributedString(string: "price", attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
     
-    productTxtFLD.backgroundColor = UIColor.yellow
+    productIMG.backgroundColor = #colorLiteral(red: 1, green: 0.862745098, blue: 0.7215686275, alpha: 1)
+    productName.backgroundColor = #colorLiteral(red: 1, green: 0.862745098, blue: 0.7215686275, alpha: 1)
+    productPrice.backgroundColor = #colorLiteral(red: 1, green: 0.862745098, blue: 0.7215686275, alpha: 1)
+    productTxtFLD.backgroundColor = #colorLiteral(red: 1, green: 0.862745098, blue: 0.7215686275, alpha: 1)
     productTxtFLD.text = "Please Fill in product Information"
     productTxtFLD.textColor = .black
     
-    productIMG.backgroundColor = UIColor.white
     productIMG.image = UIImage(named: "users.png")
     
     cancelBtn.layer.borderColor = UIColor.white.cgColor
@@ -94,6 +84,8 @@ class PopUController: UIViewController {
     updateBtn.layer.borderColor = UIColor.white.cgColor
     updateBtn.layer.borderWidth = 2
     updateBtn.layer.cornerRadius = 10
+    cancelBtn.backgroundColor = #colorLiteral(red: 1, green: 0.7568627451, blue: 0.7137254902, alpha: 1)
+    updateBtn.backgroundColor = #colorLiteral(red: 1, green: 0.7568627451, blue: 0.7137254902, alpha: 1)
   }
   
   @IBAction func cancelBtnPressed(_ sender: UIButton) {
@@ -109,30 +101,30 @@ class PopUController: UIViewController {
     let description = productTxtFLD.text
     let local_IMG = productIMG.image
     let image_Data = local_IMG!.jpegData(compressionQuality: 1.0)
-    let uploadRef = storageRef.child("\(name!).jpeg")
-    uploadRef.putData(image_Data!, metadata: nil){
+    let uploadPhotoRef = storageRef.child("\(name!).jpeg")
+    let uploadProductData = childRef.child("\(name!)")
+    
+    //UpLoad the Picture
+    uploadPhotoRef.putData(image_Data!, metadata: nil){
       meta, error in
       if error != nil {
         print(error?.localizedDescription as Any)
       }
     }
-  }
-  
-  func compressJPEG(_ originalIMG: UIImage, complete: @escaping () -> Void){
-    self.compressionQueue.addOperation {
-      if let data = originalIMG.jpegData(compressionQuality: 0.9) {
-        self.tempIMG?.image = UIImage(data: data)
-        complete()
-      }
+    if (self.productName.isFirstResponder || self.productPrice.isFirstResponder || self.productTxtFLD.isFirstResponder) {
+      self.productName.resignFirstResponder()
+      self.productPrice.resignFirstResponder()
+      self.productTxtFLD.resignFirstResponder()
+    }
+    
+    //UpLoad the Product Data
+    let uploadRawData:[String:Any] = ["name": name!, "price": Float(price!), "desc": description!, "complete": false]
+    uploadProductData.setValue(uploadRawData)
+    
+    self.dismiss(animated: true) {
+      NotificationCenter.default.post(name: NSNotification.Name("newDataNoti"), object: nil)
     }
   }
-  
-  
-  func updateIMG() {
-    print("updateIMG")
-    productIMG.image = tempIMG?.image
-  }
-  
   
 }//End Of The Class
 
@@ -142,9 +134,7 @@ extension PopUController: UINavigationControllerDelegate, UIImagePickerControlle
   
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
     if let selectedIMG = info[.originalImage] as? UIImage {
-      compressJPEG(selectedIMG) {
-        print("compress")
-      }
+      productIMG.image = selectedIMG
       self.dismiss(animated: true, completion: nil)
     }
   }

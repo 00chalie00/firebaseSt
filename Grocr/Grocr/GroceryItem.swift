@@ -32,7 +32,7 @@ struct GroceryItem {
 //var completed: Bool
   
   let key: String
-  let image: String
+  //let image: String
   let productName: String
   let price: Float
   let describe: String
@@ -41,7 +41,7 @@ struct GroceryItem {
   
   init(key: String = "", image: String, name: String, price: Float, describe: String, complete: Bool) {
     self.key = key
-    self.image = image
+    //self.image = image
     self.productName = name
     self.price = price
     self.describe = describe
@@ -52,17 +52,17 @@ struct GroceryItem {
   init(snapshot: DataSnapshot) {
     let snapshotValue = snapshot.value as! [String: AnyObject]
     key = snapshot.key
-    image = snapshotValue["image"] as! String
-    productName = snapshotValue["productName"] as! String
-    price = snapshotValue["prince"] as! Float
-    describe = snapshotValue["describe"] as! String
+    //image = snapshotValue["image"] as! String
+    productName = snapshotValue["name"] as! String
+    price = snapshotValue["price"] as! Float
+    describe = snapshotValue["desc"] as! String
     complete = snapshotValue["complete"] as! Bool
     ref = snapshot.ref
   }
   
   func toAnyObject() -> Any {
     return [
-      "image": image,
+      //"image": image,
       "produceName": productName,
       "price": price,
       "describe": describe,
