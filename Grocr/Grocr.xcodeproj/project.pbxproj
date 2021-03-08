@@ -10,6 +10,7 @@
 		2100284225B1922C00EF92C2 /* TableViewCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2100284125B1922C00EF92C2 /* TableViewCellController.swift */; };
 		2100285B25B583D600EF92C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2100285A25B583D600EF92C2 /* GoogleService-Info.plist */; };
 		219C6FE325BAC5D40033DAA6 /* image in Resources */ = {isa = PBXBuildFile; fileRef = 219C6FE225BAC5D40033DAA6 /* image */; };
+		219F762025F61154000B37C1 /* DetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219F761F25F61154000B37C1 /* DetailVC.swift */; };
 		21DF9EAE25B975A000652BFA /* PopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DF9EAD25B9759F00652BFA /* PopUpController.swift */; };
 		78B5021D1C012B5DA0C0915F /* libPods-Grocr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 936207261B39637B497B02C5 /* libPods-Grocr.a */; };
 		BB2385621B3DD5AB0079CD01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2385611B3DD5AB0079CD01 /* AppDelegate.swift */; };
@@ -19,7 +20,6 @@
 		BB23856C1B3DD5AB0079CD01 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB23856A1B3DD5AB0079CD01 /* LaunchScreen.xib */; };
 		BB2385841B3DD8660079CD01 /* GroceryListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2385831B3DD8660079CD01 /* GroceryListTableViewController.swift */; };
 		BB23858A1B3DD9640079CD01 /* GroceryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2385891B3DD9640079CD01 /* GroceryItem.swift */; };
-		BB30CD4A1B439B60004B3177 /* OnlineUsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB30CD491B439B60004B3177 /* OnlineUsersTableViewController.swift */; };
 		BB7DA5111B42C8100018B530 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7DA5101B42C8100018B530 /* User.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +28,7 @@
 		2100285A25B583D600EF92C2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../../../../../Downloads/기타/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		219C6FE225BAC5D40033DAA6 /* image */ = {isa = PBXFileReference; lastKnownFileType = folder; path = image; sourceTree = "<group>"; };
 		219C6FE825BACE540033DAA6 /* add-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-1.png"; sourceTree = "<group>"; };
+		219F761F25F61154000B37C1 /* DetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
 		21DF9EAD25B9759F00652BFA /* PopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpController.swift; sourceTree = "<group>"; };
 		936207261B39637B497B02C5 /* libPods-Grocr.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Grocr.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3FB74BEB799C414C22E1803 /* Pods-Grocr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grocr.release.xcconfig"; path = "Pods/Target Support Files/Pods-Grocr/Pods-Grocr.release.xcconfig"; sourceTree = "<group>"; };
@@ -40,7 +41,6 @@
 		BB23856B1B3DD5AB0079CD01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		BB2385831B3DD8660079CD01 /* GroceryListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroceryListTableViewController.swift; sourceTree = "<group>"; };
 		BB2385891B3DD9640079CD01 /* GroceryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroceryItem.swift; sourceTree = "<group>"; };
-		BB30CD491B439B60004B3177 /* OnlineUsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnlineUsersTableViewController.swift; sourceTree = "<group>"; };
 		BB7DA5101B42C8100018B530 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F7B315088A9EF81D7A5A40F6 /* Pods-Grocr.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grocr.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Grocr/Pods-Grocr.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,9 +123,8 @@
 			children = (
 				BB2385631B3DD5AB0079CD01 /* LoginViewController.swift */,
 				BB2385831B3DD8660079CD01 /* GroceryListTableViewController.swift */,
-				2100284125B1922C00EF92C2 /* TableViewCellController.swift */,
-				BB30CD491B439B60004B3177 /* OnlineUsersTableViewController.swift */,
 				21DF9EAD25B9759F00652BFA /* PopUpController.swift */,
+				219F761F25F61154000B37C1 /* DetailVC.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -144,6 +143,7 @@
 			children = (
 				BB2385891B3DD9640079CD01 /* GroceryItem.swift */,
 				BB7DA5101B42C8100018B530 /* User.swift */,
+				2100284125B1922C00EF92C2 /* TableViewCellController.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -285,8 +285,8 @@
 				BB2385641B3DD5AB0079CD01 /* LoginViewController.swift in Sources */,
 				BB2385841B3DD8660079CD01 /* GroceryListTableViewController.swift in Sources */,
 				BB23858A1B3DD9640079CD01 /* GroceryItem.swift in Sources */,
-				BB30CD4A1B439B60004B3177 /* OnlineUsersTableViewController.swift in Sources */,
 				BB7DA5111B42C8100018B530 /* User.swift in Sources */,
+				219F762025F61154000B37C1 /* DetailVC.swift in Sources */,
 				BB2385621B3DD5AB0079CD01 /* AppDelegate.swift in Sources */,
 				2100284225B1922C00EF92C2 /* TableViewCellController.swift in Sources */,
 			);

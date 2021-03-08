@@ -1,11 +1,3 @@
-//
-//  PopUpController.swift
-//  Grocr
-//
-//  Created by chalie on 2021/01/21.
-//  Copyright © 2021 Razeware LLC. All rights reserved.
-//
-
 import UIKit
 import AVFoundation
 import Firebase
@@ -32,9 +24,9 @@ class PopUController: UIViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    productName.delegate = self
-    productPrice.delegate = self
-    productTxtFLD.delegate = self
+    productName?.delegate = self
+    productPrice?.delegate = self
+    productTxtFLD?.delegate = self
     
     defaultValue()
   }
@@ -101,28 +93,48 @@ class PopUController: UIViewController {
     let description = productTxtFLD.text
     let local_IMG = productIMG.image
     let image_Data = local_IMG!.jpegData(compressionQuality: 1.0)
-    let uploadPhotoRef = storageRef.child("\(name!).jpeg")
-    let uploadProductData = childRef.child("\(name!)")
+    //let uploadPhotoRef = storageRef.child("\(name!).jpeg")
+    let uploadProductData = storageRef.child("Market Price/\(name!)")
+    var uploadDoc:[String:Any] =
+      ["name": name!,
+       "price": price!,
+       "desc": description!,
+       "complete": false]
     
-    //UpLoad the Picture
-    uploadPhotoRef.putData(image_Data!, metadata: nil){
-      meta, error in
-      if error != nil {
-        print(error?.localizedDescription as Any)
+    //UpLoad the Picture and Data to FireStore
+    if (image_Data) != nil {
+      print("image convert")
+      let metaData = StorageMetadata()
+      uploadProductData.putData(image_Data!, metadata: metaData) {
+        metaData, error in
+        if let _ = metaData {
+          uploadProductData.downloadURL {
+            url, error in
+            if error != nil {
+              print(error?.localizedDescription as Any)
+            }
+            let downUrlStr = url?.absoluteString
+            uploadDoc.updateValue(downUrlStr, forKey: "Image URL")
+            print(uploadDoc)
+            Firestore.firestore().collection("Market Price").document().setData(uploadDoc) {
+              error in
+              if error != nil {
+                print("Failed upload the Data")
+              }
+              print("Success upload the Data")
+              self.dismiss(animated: true) {
+                NotificationCenter.default.post(name: NSNotification.Name("newDataNoti"), object: nil)
+              }
+            }
+          }
+        }
       }
     }
+    
     if (self.productName.isFirstResponder || self.productPrice.isFirstResponder || self.productTxtFLD.isFirstResponder) {
       self.productName.resignFirstResponder()
       self.productPrice.resignFirstResponder()
       self.productTxtFLD.resignFirstResponder()
-    }
-    
-    //UpLoad the Product Data
-    let uploadRawData:[String:Any] = ["name": name!, "price": Float(price!), "desc": description!, "complete": false]
-    uploadProductData.setValue(uploadRawData)
-    
-    self.dismiss(animated: true) {
-      NotificationCenter.default.post(name: NSNotification.Name("newDataNoti"), object: nil)
     }
   }
   

@@ -1,11 +1,3 @@
-//
-//  TableViewCellController.swift
-//  Grocr
-//
-//  Created by chalie on 2021/01/15.
-//  Copyright © 2021 Razeware LLC. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
