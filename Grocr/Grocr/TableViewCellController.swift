@@ -6,7 +6,7 @@ class CellController: UITableViewCell{
   
   @IBOutlet weak var name: UILabel!
   @IBOutlet weak var price: UILabel!
-  @IBOutlet weak var IMG: UIImageView!
+  @IBOutlet weak var img: UIImageView!
   
 }//End Of The Class
 

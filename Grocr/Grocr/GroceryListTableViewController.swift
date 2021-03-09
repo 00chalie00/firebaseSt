@@ -8,8 +8,14 @@ class GroceryListTableViewController: UITableViewController {
   
   // MARK: Properties 
   var items: [GroceryItem] = []
+  var currentData:[String:Any] = [:]
+  var currentImg: UIImage = UIImage()
+  
   var user: User!
   var userCountBarButtonItem: UIBarButtonItem!
+  var loadView = UIView()
+  var loadLabel = UILabel()
+  var spinner = UIActivityIndicatorView()
   
   var firebaseReference = Database.database().reference()
   let childRefer = Database.database().reference(withPath: "Market Price")
@@ -36,20 +42,21 @@ class GroceryListTableViewController: UITableViewController {
     queryforServer()
   }
   
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-    self.items = []
-    self.tableView.reloadData()
-    queryforServer()
-    self.tableView.reloadData()
-    print("Will")
-  }
+//  override func viewWillAppear(_ animated: Bool) {
+//    super.viewWillAppear(animated)
+//    self.items = []
+//    self.currentData = [:]
+//    self.currentImg = nil
+//
+//    queryforServer()
+//    self.tableView.reloadData()
+//    print("Will")
+//  }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     
     self.items = []
-    self.tableView.reloadData()
     queryforServer()
     self.tableView.reloadData()
     print("Did")
@@ -90,6 +97,8 @@ class GroceryListTableViewController: UITableViewController {
     print("Called Query Func")
     var returnItem: [GroceryItem] = []
     
+    setLoadingScreen()
+
     Firestore.firestore().collection("Market Price").getDocuments(completion: {
       snapshot, error in
       if error != nil {
@@ -103,7 +112,7 @@ class GroceryListTableViewController: UITableViewController {
         self.items = returnItem
         self.tableView.reloadData()
       }
-      
+      self.spinnerOff()
       // Query from RealTime DB
       //    childRefer.queryOrdered(byChild: childName).observe(.value) {
       //      (dataSnapshot) in
@@ -118,6 +127,34 @@ class GroceryListTableViewController: UITableViewController {
     })
   }
   
+  func setLoadingScreen() {
+    let width: CGFloat = 230
+    let height: CGFloat = 30
+    let x = (tableView.frame.width / 2) - (width / 2)
+    let y = (tableView.frame.height / 2) - (height / 2)
+    loadView.frame = CGRect(x: x, y: y, width: width, height: height)
+    
+    loadLabel.text = "Loading Please Wait"
+    loadLabel.textAlignment = .center
+    loadLabel.frame = CGRect(x: 30, y: 0, width: 200, height: 30)
+    
+    spinner.style = .medium
+    spinner.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+    spinner.startAnimating()
+    
+    loadView.addSubview(loadLabel)
+    loadView.addSubview(spinner)
+    
+    tableView.addSubview(loadView)
+    
+  }
+  
+  func spinnerOff() {
+    spinner.stopAnimating()
+    spinner.isHidden = true
+    loadView.isHidden = true
+  }
+  
   @IBAction func itemIMGSetting(_ sender: UIButton) {
     print("pushed Img Btn")
   }
@@ -125,7 +162,6 @@ class GroceryListTableViewController: UITableViewController {
   // MARK: UITableView Delegate methods
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    print(items.count)
     return items.count
   }
   
@@ -134,12 +170,17 @@ class GroceryListTableViewController: UITableViewController {
     let groceryItem = items[indexPath.row]
   
     cell.name.text = groceryItem.productName!
-    print(groceryItem.productName!)
     cell.price.text = groceryItem.price!
     
     let imgUrl:URL = URL(string: groceryItem.image!)!
     let imgData = try! Data(contentsOf: imgUrl)
-    cell.IMG.image = UIImage(data: imgData)
+    cell.img.image = UIImage(data: imgData)
+    if let selImage = cell.img.image {
+      DispatchQueue.main.async {
+        self.currentImg = selImage
+      }
+    }
+
     
     return cell
   }
@@ -156,10 +197,18 @@ class GroceryListTableViewController: UITableViewController {
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//    let detailvc = storyboard?.instantiateViewController(identifier: "DetailVC") as? DetailViewController
-//    present(detailvc!, animated: true, completion: nil)
+    let indexData = items[indexPath.row]
+    currentData = ["Name": indexData.productName, "Price": indexData.price]
     performSegue(withIdentifier: "DetailVC", sender: nil)
-    
+  }
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    print("Segue")
+    let destinationVC = segue.destination as! DetailViewController
+    destinationVC.name = currentData["Name"] as? String
+    destinationVC.price = currentData["Price"] as? String
+    destinationVC.productIMG = currentImg
+    print(currentImg)
   }
   
 }//End Of The Class
