@@ -16,24 +16,24 @@ class DetailViewController: UIViewController {
   
   @IBOutlet weak var nameLbl: UILabel!
   @IBOutlet weak var priceLbl: UILabel!
-  @IBOutlet weak var imageView: UIImageView!
+  @IBOutlet weak var detailIMG: UIImageView!
   
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    print("detail Did")
     
     nameLbl.text = name!
     priceLbl.text = price!
-    imageView.image = productIMG
+    detailIMG.image = productIMG
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+ 
   }
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    print("detail Will")
-    nameLbl.text = name!
-    priceLbl.text = price!
-    imageView.image = productIMG
     
   }
   

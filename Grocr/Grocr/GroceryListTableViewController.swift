@@ -9,7 +9,7 @@ class GroceryListTableViewController: UITableViewController {
   // MARK: Properties 
   var items: [GroceryItem] = []
   var currentData:[String:Any] = [:]
-  var currentImg: UIImage = UIImage()
+  var currentImg: UIImage?
   
   var user: User!
   var userCountBarButtonItem: UIBarButtonItem!
@@ -42,24 +42,13 @@ class GroceryListTableViewController: UITableViewController {
     queryforServer()
   }
   
-//  override func viewWillAppear(_ animated: Bool) {
-//    super.viewWillAppear(animated)
-//    self.items = []
-//    self.currentData = [:]
-//    self.currentImg = nil
-//
-//    queryforServer()
-//    self.tableView.reloadData()
-//    print("Will")
-//  }
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+  }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    
-    self.items = []
-    queryforServer()
-    self.tableView.reloadData()
-    print("Did")
+
   }
   
   @objc func refresh() {
@@ -175,12 +164,6 @@ class GroceryListTableViewController: UITableViewController {
     let imgUrl:URL = URL(string: groceryItem.image!)!
     let imgData = try! Data(contentsOf: imgUrl)
     cell.img.image = UIImage(data: imgData)
-    if let selImage = cell.img.image {
-      DispatchQueue.main.async {
-        self.currentImg = selImage
-      }
-    }
-
     
     return cell
   }
@@ -198,7 +181,11 @@ class GroceryListTableViewController: UITableViewController {
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let indexData = items[indexPath.row]
-    currentData = ["Name": indexData.productName, "Price": indexData.price]
+    currentData = ["Name": indexData.productName!, "Price": indexData.price!]
+    
+    guard let cell = tableView.cellForRow(at: indexPath) as? CellController else { return }
+    currentImg = cell.img.image
+    
     performSegue(withIdentifier: "DetailVC", sender: nil)
   }
   
@@ -207,8 +194,7 @@ class GroceryListTableViewController: UITableViewController {
     let destinationVC = segue.destination as! DetailViewController
     destinationVC.name = currentData["Name"] as? String
     destinationVC.price = currentData["Price"] as? String
-    destinationVC.productIMG = currentImg
-    print(currentImg)
+    destinationVC.productIMG = currentImg!
   }
   
 }//End Of The Class
@@ -218,8 +204,8 @@ class GroceryListTableViewController: UITableViewController {
 // MARK: UIPickerController Extenstion
 extension GroceryListTableViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
   
-  func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-    if let pickedImg = info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage {
+  private func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    if (info[UIImagePickerController.InfoKey.originalImage.rawValue] as? UIImage) != nil {
       
     }
   }
