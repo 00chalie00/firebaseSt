@@ -1,0 +1,6 @@
+module Pods_Grocr {
+  umbrella header "Pods-Grocr-umbrella.h"
+
+  export *
+  module * { export * }
+}

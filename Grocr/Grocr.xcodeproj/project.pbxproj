@@ -11,6 +11,7 @@
 		2100285B25B583D600EF92C2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2100285A25B583D600EF92C2 /* GoogleService-Info.plist */; };
 		219C6FE325BAC5D40033DAA6 /* image in Resources */ = {isa = PBXBuildFile; fileRef = 219C6FE225BAC5D40033DAA6 /* image */; };
 		219F762025F61154000B37C1 /* DetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 219F761F25F61154000B37C1 /* DetailVC.swift */; };
+		21A31DA625F9FAC600DDEF0D /* UserInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A31DA525F9FAC600DDEF0D /* UserInterface.swift */; };
 		21DF9EAE25B975A000652BFA /* PopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DF9EAD25B9759F00652BFA /* PopUpController.swift */; };
 		78B5021D1C012B5DA0C0915F /* libPods-Grocr.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 936207261B39637B497B02C5 /* libPods-Grocr.a */; };
 		BB2385621B3DD5AB0079CD01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2385611B3DD5AB0079CD01 /* AppDelegate.swift */; };
@@ -29,6 +30,7 @@
 		219C6FE225BAC5D40033DAA6 /* image */ = {isa = PBXFileReference; lastKnownFileType = folder; path = image; sourceTree = "<group>"; };
 		219C6FE825BACE540033DAA6 /* add-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-1.png"; sourceTree = "<group>"; };
 		219F761F25F61154000B37C1 /* DetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
+		21A31DA525F9FAC600DDEF0D /* UserInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInterface.swift; sourceTree = "<group>"; };
 		21DF9EAD25B9759F00652BFA /* PopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpController.swift; sourceTree = "<group>"; };
 		936207261B39637B497B02C5 /* libPods-Grocr.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Grocr.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3FB74BEB799C414C22E1803 /* Pods-Grocr.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Grocr.release.xcconfig"; path = "Pods/Target Support Files/Pods-Grocr/Pods-Grocr.release.xcconfig"; sourceTree = "<group>"; };
@@ -66,6 +68,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		21A31DA425F9FAA400DDEF0D /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				21A31DA525F9FAC600DDEF0D /* UserInterface.swift */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
 		4C4D091D73BF0F117B6F7175 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +107,7 @@
 		BB23855E1B3DD5AB0079CD01 /* Grocr */ = {
 			isa = PBXGroup;
 			children = (
+				21A31DA425F9FAA400DDEF0D /* UI */,
 				BB2385881B3DD9550079CD01 /* Models */,
 				BB2385811B3DD8310079CD01 /* Controllers */,
 				BB2385821B3DD8490079CD01 /* Layouts */,
@@ -288,6 +299,7 @@
 				BB7DA5111B42C8100018B530 /* User.swift in Sources */,
 				219F762025F61154000B37C1 /* DetailVC.swift in Sources */,
 				BB2385621B3DD5AB0079CD01 /* AppDelegate.swift in Sources */,
+				21A31DA625F9FAC600DDEF0D /* UserInterface.swift in Sources */,
 				2100284225B1922C00EF92C2 /* TableViewCellController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

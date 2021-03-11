@@ -13,6 +13,8 @@ class GroceryListTableViewController: UITableViewController {
   
   var user: User!
   var userCountBarButtonItem: UIBarButtonItem!
+  
+  var loadScreen:UIVC = UIVC()
   var loadView = UIView()
   var loadLabel = UILabel()
   var spinner = UIActivityIndicatorView()
@@ -86,9 +88,10 @@ class GroceryListTableViewController: UITableViewController {
     print("Called Query Func")
     var returnItem: [GroceryItem] = []
     
-    setLoadingScreen()
-
-    Firestore.firestore().collection("Market Price").getDocuments(completion: {
+    loadScreen.setLoadingScreen(tableView: tableView, loadView: loadView, loadLabel: loadLabel, spinner: spinner)
+    tableView.reloadData()
+    
+    Firestore.firestore().collection("Market Price").getDocuments(completion: { [self]
       snapshot, error in
       if error != nil {
         print(error?.localizedDescription as Any)
@@ -101,7 +104,7 @@ class GroceryListTableViewController: UITableViewController {
         self.items = returnItem
         self.tableView.reloadData()
       }
-      self.spinnerOff()
+      self.loadScreen.spinnerOff(spinner: spinner, loadView: loadView)
       // Query from RealTime DB
       //    childRefer.queryOrdered(byChild: childName).observe(.value) {
       //      (dataSnapshot) in
@@ -116,33 +119,7 @@ class GroceryListTableViewController: UITableViewController {
     })
   }
   
-  func setLoadingScreen() {
-    let width: CGFloat = 230
-    let height: CGFloat = 30
-    let x = (tableView.frame.width / 2) - (width / 2)
-    let y = (tableView.frame.height / 2) - (height / 2)
-    loadView.frame = CGRect(x: x, y: y, width: width, height: height)
-    
-    loadLabel.text = "Loading Please Wait"
-    loadLabel.textAlignment = .center
-    loadLabel.frame = CGRect(x: 30, y: 0, width: 200, height: 30)
-    
-    spinner.style = .medium
-    spinner.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-    spinner.startAnimating()
-    
-    loadView.addSubview(loadLabel)
-    loadView.addSubview(spinner)
-    
-    tableView.addSubview(loadView)
-    
-  }
-  
-  func spinnerOff() {
-    spinner.stopAnimating()
-    spinner.isHidden = true
-    loadView.isHidden = true
-  }
+
   
   @IBAction func itemIMGSetting(_ sender: UIButton) {
     print("pushed Img Btn")
