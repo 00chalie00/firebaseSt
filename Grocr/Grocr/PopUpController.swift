@@ -87,7 +87,6 @@ class PopUController: UIViewController {
   
   @IBAction func updateBtnPressed(_ sender: UIButton) {
     print("update BTN Pressed")
-    
     let name = productName.text
     let price = productPrice.text
     let description = productTxtFLD.text
@@ -99,7 +98,7 @@ class PopUController: UIViewController {
       ["name": name!,
        "price": price!,
        "desc": description!,
-       "complete": false]
+       "complete": false] 
     
     //UpLoad the Picture and Data to FireStore
     if (image_Data) != nil {
@@ -114,7 +113,7 @@ class PopUController: UIViewController {
               print(error?.localizedDescription as Any)
             }
             let downUrlStr = url?.absoluteString
-            uploadDoc.updateValue(downUrlStr, forKey: "Image URL")
+            uploadDoc.updateValue(downUrlStr!, forKey: "Image URL")
             print(uploadDoc)
             Firestore.firestore().collection("Market Price").document().setData(uploadDoc) {
               error in

@@ -44,15 +44,15 @@ struct GroceryItem {
     
   }
   
-  func toAnyObject() -> Any {
-    return [
-      "image": image,
-      "produceName": productName,
-      "price": price,
-      "describe": describe,
-      "complete": complete
-    ]
-  }
+//  func toAnyObject() -> Any {
+//    return [
+//      "image": image,
+//      "produceName": productName,
+//      "price": price,
+//      "describe": describe,
+//      "complete": complete
+//    ]
+//  }
   
 }//End Of The Struct
 

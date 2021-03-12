@@ -20,10 +20,13 @@ class DetailViewController: UIViewController {
   @IBOutlet weak var detailIMG: UIImageView!
   @IBOutlet weak var chartView: BarChartView!
   
+  weak var asixFormatDelegate: IAxisValueFormatter?
+  
   var months: [String] = []
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    self.asixFormatDelegate = self
     
     nameLbl.text = name!
     priceLbl.text = price!
@@ -53,21 +56,26 @@ class DetailViewController: UIViewController {
   
   func setChart(dataPoints: [String], values: [Double]) {
     chartView.noDataText = "You need to provide data for the chart."
-    
     var dataEntries: [BarChartDataEntry] = []
-    
     for i in 0..<dataPoints.count {
-      //let dataEntry = BarChartDataEntry(value: values[i], xIndex: i)
-      let dataEnrty = BarChartDataEntry(x: Double(dataPoints[i]) ?? 1, y: Double(values[i]))
+      let dataEnrty = BarChartDataEntry(x: Double(i), y: Double(values[i]), data: months as AnyObject?)
       dataEntries.append(dataEnrty)
     }
     
     let chartDataSet = BarChartDataSet(entries: dataEntries, label: "降水量")
     let chartData = BarChartData(dataSet: chartDataSet)
     chartView.data = chartData
+    let xAxisValue = chartView.xAxis
+    xAxisValue.valueFormatter = asixFormatDelegate
   }
-  
-  
   
 }//End Of The Class
 
+
+//MARK: IAxisValueFormatter Delegate
+extension DetailViewController: IAxisValueFormatter {
+  func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+    
+    return months[Int(value)]
+  }
+}
