@@ -15,9 +15,6 @@ class GroceryListTableViewController: UITableViewController {
   var userCountBarButtonItem: UIBarButtonItem!
   
   var loadScreen:UIVC = UIVC()
-  var loadView = UIView()
-  var loadLabel = UILabel()
-  var spinner = UIActivityIndicatorView()
   
   var firebaseReference = Database.database().reference()
   let childRefer = Database.database().reference(withPath: "Market Price")
@@ -88,7 +85,7 @@ class GroceryListTableViewController: UITableViewController {
     print("Called Query Func")
     var returnItem: [GroceryItem] = []
     
-    loadScreen.setLoadingScreen(tableView: tableView, loadView: loadView, loadLabel: loadLabel, spinner: spinner)
+    loadScreen.setLoadingScreen(uiView: tableView)
     tableView.reloadData()
     
     Firestore.firestore().collection("Market Price").getDocuments(completion: { [self]
@@ -102,9 +99,10 @@ class GroceryListTableViewController: UITableViewController {
           returnItem.append(GroceryItem(document: convertData[i]))
         }
         self.items = returnItem
+        print(returnItem)
         self.tableView.reloadData()
       }
-      self.loadScreen.spinnerOff(spinner: spinner, loadView: loadView)
+      self.loadScreen.spinnerOff()
       // Query from RealTime DB
       //    childRefer.queryOrdered(byChild: childName).observe(.value) {
       //      (dataSnapshot) in
@@ -136,7 +134,12 @@ class GroceryListTableViewController: UITableViewController {
     let groceryItem = items[indexPath.row]
   
     cell.name.text = groceryItem.productName!
-    cell.price.text = groceryItem.price!
+    //Convert Price Format
+    let numberFormat = NumberFormatter()
+    numberFormat.numberStyle = .decimal
+    let lastPrice = groceryItem.price.last!!
+    let lastPriceStr = numberFormat.string(for: Int(lastPrice))
+    cell.price.text = lastPriceStr!
     
     let imgUrl:URL = URL(string: groceryItem.image!)!
     let imgData = try! Data(contentsOf: imgUrl)
@@ -149,6 +152,7 @@ class GroceryListTableViewController: UITableViewController {
     return true
   }
   
+  
   override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
     if editingStyle == .delete {
       items.remove(at: indexPath.row)
@@ -158,7 +162,7 @@ class GroceryListTableViewController: UITableViewController {
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let indexData = items[indexPath.row]
-    currentData = ["Name": indexData.productName!, "Price": indexData.price!]
+    currentData = ["Name": indexData.productName!, "Price": indexData.price]
     
     guard let cell = tableView.cellForRow(at: indexPath) as? CellController else { return }
     currentImg = cell.img.image

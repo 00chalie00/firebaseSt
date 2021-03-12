@@ -5,18 +5,20 @@ struct GroceryItem {
   let key: String
   let image: String?
   let productName: String?
-  let price: String?
+  let price: [String?]
   let describe: String?
   let complete: Bool?
+  let priceCount: Int?
   let ref: DatabaseReference?
   
-  init(key: String = "", image: String, name: String, price: String, describe: String, complete: Bool) {
+  init(key: String = "", image: String, name: String, price: [String], describe: String, complete: Bool, priceCount: Int) {
     self.key = key
     self.image = image
     self.productName = name
     self.price = price
     self.describe = describe
     self.complete = complete
+    self.priceCount = priceCount
     self.ref = nil
   }
   
@@ -25,9 +27,10 @@ struct GroceryItem {
     self.key = snapshot.key
     self.image = snapshotValue["image"] as? String
     self.productName = snapshotValue["name"] as? String
-    self.price = snapshotValue["price"] as? String
+    self.price = snapshotValue["price"] as? [String] ?? ["0"]
     self.describe = snapshotValue["desc"] as? String
     self.complete = snapshotValue["complete"] as? Bool
+    self.priceCount = snapshotValue["PriceCount"] as? Int
     self.ref = snapshot.ref
   }
   
@@ -37,9 +40,10 @@ struct GroceryItem {
     self.key = document.documentID
     self.image = dataDic["Image URL"] as? String
     self.productName = dataDic["name"] as? String
-    self.price = dataDic["price"] as? String
+    self.price = dataDic["price"] as? [String] ?? ["Price Error"]
     self.describe = dataDic["desc"] as? String
     self.complete = dataDic["complete"] as? Bool
+    self.priceCount = dataDic["PriceCount"] as? Int
     self.ref = nil
     
   }

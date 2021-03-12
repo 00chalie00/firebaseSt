@@ -17,6 +17,7 @@ class PopUController: UIViewController {
   var items:[GroceryItem] = []
   var user: User!
   var tempIMG: UIImageView?
+  var uiVC: UIVC = UIVC()
   
   var firebaseRef = Database.database().reference()
   var childRef = Database.database().reference(withPath: "Market Price")
@@ -87,18 +88,20 @@ class PopUController: UIViewController {
   
   @IBAction func updateBtnPressed(_ sender: UIButton) {
     print("update BTN Pressed")
+    uiVC.setLoadingScreen(uiView: self.view)
+    
     let name = productName.text
     let price = productPrice.text
     let description = productTxtFLD.text
     let local_IMG = productIMG.image
     let image_Data = local_IMG!.jpegData(compressionQuality: 1.0)
-    //let uploadPhotoRef = storageRef.child("\(name!).jpeg")
     let uploadProductData = storageRef.child("Market Price/\(name!)")
     var uploadDoc:[String:Any] =
       ["name": name!,
-       "price": price!,
+       "price": [price!],
        "desc": description!,
-       "complete": false] 
+       "complete": false,
+       "PriceCount": 1]
     
     //UpLoad the Picture and Data to FireStore
     if (image_Data) != nil {
@@ -114,7 +117,6 @@ class PopUController: UIViewController {
             }
             let downUrlStr = url?.absoluteString
             uploadDoc.updateValue(downUrlStr!, forKey: "Image URL")
-            print(uploadDoc)
             Firestore.firestore().collection("Market Price").document().setData(uploadDoc) {
               error in
               if error != nil {
@@ -129,6 +131,7 @@ class PopUController: UIViewController {
         }
       }
     }
+    uiVC.spinnerOff()
     
     if (self.productName.isFirstResponder || self.productPrice.isFirstResponder || self.productTxtFLD.isFirstResponder) {
       self.productName.resignFirstResponder()

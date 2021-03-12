@@ -11,13 +11,17 @@ import UIKit
 
 class UIVC {
   
-  func setLoadingScreen(tableView: UITableView, loadView: UIView, loadLabel: UILabel, spinner: UIActivityIndicatorView) {
+  var loadView = UIView()
+  var loadLabel = UILabel()
+  var spinner = UIActivityIndicatorView()
+  
+  func setLoadingScreen(uiView: UIView) {
     print("Start Spinner")
     
     let width: CGFloat = 230
     let height: CGFloat = 30
-    let x = (tableView.frame.width / 2) - (width / 2)
-    let y = (tableView.frame.height / 2) - (height / 2)
+    let x = (uiView.frame.width / 2) - (width / 2)
+    let y = (uiView.frame.height / 2) - (height / 2)
     loadView.frame = CGRect(x: x, y: y, width: width, height: height)
     
     loadLabel.text = "Loading Please Wait"
@@ -31,11 +35,11 @@ class UIVC {
     loadView.addSubview(loadLabel)
     loadView.addSubview(spinner)
     
-    tableView.addSubview(loadView)
+    uiView.addSubview(loadView)
     
   }
   
-  func spinnerOff(spinner: UIActivityIndicatorView, loadView: UIView) {
+  func spinnerOff() {
     spinner.stopAnimating()
     spinner.isHidden = true
     loadView.isHidden = true
