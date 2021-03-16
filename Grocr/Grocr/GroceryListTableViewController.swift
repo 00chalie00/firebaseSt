@@ -88,7 +88,7 @@ class GroceryListTableViewController: UITableViewController {
     loadScreen.setLoadingScreen(uiView: tableView)
     tableView.reloadData()
     
-    Firestore.firestore().collection("Market Price").getDocuments(completion: { [self]
+    Firestore.firestore().collection("Market Price").getDocuments(completion: {
       snapshot, error in
       if error != nil {
         print(error?.localizedDescription as Any)
@@ -162,8 +162,7 @@ class GroceryListTableViewController: UITableViewController {
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let indexData = items[indexPath.row]
-    currentData = ["Name": indexData.productName!, "Price": indexData.price]
-    
+    currentData = ["Name": indexData.productName!, "Price": indexData.price, "LastPrice": indexData.price.last!!, "Current Date": indexData.currentDate]
     guard let cell = tableView.cellForRow(at: indexPath) as? CellController else { return }
     currentImg = cell.img.image
     
@@ -174,8 +173,24 @@ class GroceryListTableViewController: UITableViewController {
     print("Segue")
     let destinationVC = segue.destination as! DetailViewController
     destinationVC.name = currentData["Name"] as? String
-    destinationVC.price = currentData["Price"] as? String
+    destinationVC.price = currentData["LastPrice"] as? String
+    destinationVC.priceS = currentData["Price"] as? [String]
+    destinationVC.currentDate = currentData["Current Date"] as? [NSDate]
     destinationVC.productIMG = currentImg!
+  }
+  
+  override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    let deleteAC = UIContextualAction(style: .normal, title: "Delete") { (action, view, complionHalder) in
+      print("Swipe Delete")
+      complionHalder(true)
+    }
+//    let updateAC = UIContextualAction(style: .destructive, title: "Update") { (action, view, completionHalder) in
+//      print("Swipe Update")
+//      completionHalder(true)
+//    }
+    
+    return UISwipeActionsConfiguration(actions: [deleteAC])
+    
   }
   
 }//End Of The Class

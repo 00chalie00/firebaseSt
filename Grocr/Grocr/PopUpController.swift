@@ -117,6 +117,12 @@ class PopUController: UIViewController {
             }
             let downUrlStr = url?.absoluteString
             uploadDoc.updateValue(downUrlStr!, forKey: "Image URL")
+            //Check The Current Time
+            let price_Time = NSDate()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd.mm.yyyy"
+            let result = formatter.string(from: price_Time as Date)
+            uploadDoc.updateValue(result, forKey: "Current Date")
             Firestore.firestore().collection("Market Price").document().setData(uploadDoc) {
               error in
               if error != nil {

@@ -13,7 +13,14 @@ class DetailViewController: UIViewController {
   
   var name: String?
   var price: String?
+  var priceS: [String]?
+  var currentDate: [NSDate]?
   var productIMG: UIImage = UIImage()
+  
+  lazy var modifyBarBtn: UIBarButtonItem = {
+    let button = UIBarButtonItem(title: "Modify", style: .plain, target: self, action: #selector(modifyBtnPressed( _:)))
+    return button
+  }()
   
   @IBOutlet weak var nameLbl: UILabel!
   @IBOutlet weak var priceLbl: UILabel!
@@ -28,20 +35,30 @@ class DetailViewController: UIViewController {
     super.viewDidLoad()
     self.asixFormatDelegate = self
     
+    self.navigationItem.rightBarButtonItem = self.modifyBarBtn
+    
     nameLbl.text = name!
-    priceLbl.text = price!
+    //conver Price Type
+    let numberFormat = NumberFormatter()
+    numberFormat.numberStyle = .decimal
+    priceLbl.text = numberFormat.string(for: Int(price!))
     detailIMG.image = productIMG
     
-    months = ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
-    let unitsSold = [50.3, 68.3, 113.3, 115.7, 160.8, 214.0, 220.4, 132.1, 176.2, 120.9, 71.3, 48.0]
+    months = createItem(objectArr: priceS!, time: currentDate!)
+    print(months)
     
     chartView.animate(yAxisDuration: 2.0)
     chartView.pinchZoomEnabled = false
     chartView.drawBarShadowEnabled = false
     chartView.drawBordersEnabled = true
     
+    var doublePrice:[Double] = []
+    print(priceS as Any)
+    for i in 0..<priceS!.count {
+      doublePrice.append(Double(priceS![i])!)
+    }
     
-    setChart(dataPoints: months, values: unitsSold)
+    setChart(dataPoints: months, values: doublePrice)
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -54,6 +71,10 @@ class DetailViewController: UIViewController {
     
   }
   
+  @objc func modifyBtnPressed( _: UIBarButtonItem) {
+    print("barbtnPressed")
+  }
+  
   func setChart(dataPoints: [String], values: [Double]) {
     chartView.noDataText = "You need to provide data for the chart."
     var dataEntries: [BarChartDataEntry] = []
@@ -62,13 +83,28 @@ class DetailViewController: UIViewController {
       dataEntries.append(dataEnrty)
     }
     
-    let chartDataSet = BarChartDataSet(entries: dataEntries, label: "降水量")
+    let chartDataSet = BarChartDataSet(entries: dataEntries, label: "\(String(describing: name!)) Price")
     let chartData = BarChartData(dataSet: chartDataSet)
     chartView.data = chartData
     let xAxisValue = chartView.xAxis
     xAxisValue.valueFormatter = asixFormatDelegate
   }
   
+  func createItem(objectArr :[Any], time: [NSDate]) -> [String] {
+    var stringArr:[String] = []
+    for i in 0..<objectArr.count {
+      let format = DateFormatter()
+      //format.dateFormat = "dd.mm"
+      format.dateStyle = .short
+      let resultTime = format.string(from: time[i] as Date)
+      
+      let combineStr = "\(i + 1)\(resultTime)"
+      print(combineStr)
+      stringArr.append(combineStr)
+    }
+    return stringArr
+  }
+   
 }//End Of The Class
 
 
