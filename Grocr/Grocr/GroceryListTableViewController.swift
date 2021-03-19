@@ -140,8 +140,9 @@ class GroceryListTableViewController: UITableViewController {
     let lastPrice = groceryItem.price.last!!
     let lastPriceStr = numberFormat.string(for: Int(lastPrice))
     cell.price.text = lastPriceStr!
-    
-    let imgUrl:URL = URL(string: groceryItem.image!)!
+  
+    let defaultUrlStr = "https://firebasestorage.googleapis.com/v0/b/fir-study-b239d.appspot.com/o/Market%20Price%2FMarket%20Price%2F%EB%A7%A4%EC%A7%81%20%EB%A7%88%EC%9A%B0%EC%8A%A4?alt=media&token=27241331-c409-40be-9749-66c4621d3ef9"
+    let imgUrl:URL = URL(string: groceryItem.image ?? defaultUrlStr)!
     let imgData = try! Data(contentsOf: imgUrl)
     cell.img.image = UIImage(data: imgData)
     

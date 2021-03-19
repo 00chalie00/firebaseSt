@@ -46,8 +46,6 @@ class LoginViewController: UIViewController {
             }
             print("Success to access the Firebase")
             self.performSegue(withIdentifier: self.loginToList, sender: nil)
-            
-            
           }
         }
       }

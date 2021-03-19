@@ -73,6 +73,87 @@ class DetailViewController: UIViewController {
   
   @objc func modifyBtnPressed( _: UIBarButtonItem) {
     print("barbtnPressed")
+//    let alertCon = UIAlertController(title: "Please Input Product Information", message: "Information Modify", preferredStyle: .alert)
+//    let txtFld = alertCon.textFields
+//    let alertModify = UIAlertAction(title: "Confirm Modify", style: .default) {
+//      modify in
+//      let modifyDate = txtFld?[0].text
+//      let modifyPrice = txtFld?[1].text
+//    }
+//    let alertCancel = UIAlertAction(title: "Cancel", style: .default) {
+//      cancel in
+//      self.dismiss(animated: true, completion: nil)
+//    }
+//
+//    alertCon.addTextField { txtFld in
+//      txtFld.placeholder = "Date"
+//    }
+//    alertCon.addTextField { txtFld in
+//      txtFld.placeholder = "Price"
+//    }
+//
+//    alertCon.addAction(alertModify)
+//    alertCon.addAction(alertCancel)
+//    self.present(alertCon, animated: true, completion: nil)
+    let popUpView = UIView()
+    let nameTxtFd = UITextField()
+    let priceTxtFd = UITextField()
+    let notiLbl = UILabel()
+    let modifyBtn = UIButton()
+    let cancelBtn = UIButton()
+    
+    let width: CGFloat = 300
+    let height: CGFloat = 240
+    let x = (view.frame.width / 2) - (width / 2)
+    let y = (view.frame.height / 2) - (height / 2)
+    popUpView.backgroundColor = .green
+    popUpView.frame = CGRect(x: x, y: y, width: width, height: height)
+    
+    notiLbl.text = "Input The Information"
+    notiLbl.adjustsFontSizeToFitWidth = true
+    notiLbl.textAlignment = .center
+    notiLbl.backgroundColor = .lightGray
+    notiLbl.frame = CGRect(x: 10, y: 10, width: 280, height: 40)
+    
+    nameTxtFd.placeholder = "Name"
+    nameTxtFd.textAlignment = .center
+    nameTxtFd.backgroundColor = .brown
+    nameTxtFd.frame = CGRect(x: 50, y: 60, width: 200, height: 50)
+    
+    priceTxtFd.placeholder = "Price"
+    priceTxtFd.textAlignment = .center
+    priceTxtFd.backgroundColor = .brown
+    priceTxtFd.frame = CGRect(x: 50, y: 110, width: 200, height: 50)
+    
+    modifyBtn.titleLabel?.text = "Modify"
+    modifyBtn.titleLabel?.textAlignment = .center
+    modifyBtn.titleLabel?.textColor = .black
+    modifyBtn.backgroundColor = .orange
+    modifyBtn.frame = CGRect(x: 60, y: 170, width: 80, height: 50)
+    modifyBtn.addTarget(self, action: #selector(modifyPressed(_:)), for: .touchUpInside)
+    
+    cancelBtn.titleLabel?.text = "Cancel"
+    cancelBtn.titleLabel?.textAlignment = .center
+    cancelBtn.titleLabel?.textColor = .black
+    cancelBtn.backgroundColor = .orange
+    cancelBtn.frame = CGRect(x: 160, y: 170, width: 80, height: 50)
+    cancelBtn.addTarget(self, action: #selector(cancelPressed(_:)), for: .touchUpInside)
+    
+    popUpView.addSubview(notiLbl)
+    popUpView.addSubview(nameTxtFd)
+    popUpView.addSubview(priceTxtFd)
+    popUpView.addSubview(modifyBtn)
+    popUpView.addSubview(cancelBtn)
+    
+    self.view.addSubview(popUpView)
+  }
+  
+  @objc func modifyPressed( _:UIButton) {
+    print("modify Pressed")
+  }
+  
+  @objc func cancelPressed( _: UIButton) {
+    print("Cancel Pressed")
   }
   
   func setChart(dataPoints: [String], values: [Double]) {
@@ -84,6 +165,7 @@ class DetailViewController: UIViewController {
     }
     
     let chartDataSet = BarChartDataSet(entries: dataEntries, label: "\(String(describing: name!)) Price")
+    chartView.xAxis.labelCount = priceS!.count
     let chartData = BarChartData(dataSet: chartDataSet)
     chartView.data = chartData
     let xAxisValue = chartView.xAxis
