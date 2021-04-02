@@ -8,6 +8,7 @@
 
 import UIKit
 import Charts
+import Firebase
 
 class DetailViewController: UIViewController {
   
@@ -16,6 +17,8 @@ class DetailViewController: UIViewController {
   var priceS: [String]?
   var currentDate: [NSDate]?
   var productIMG: UIImage = UIImage()
+  
+  var storageRef = Storage.storage().reference(withPath: "Market Price")
   
   lazy var modifyBarBtn: UIBarButtonItem = {
     let button = UIBarButtonItem(title: "Modify", style: .plain, target: self, action: #selector(modifyBtnPressed( _:)))
@@ -26,6 +29,9 @@ class DetailViewController: UIViewController {
   @IBOutlet weak var priceLbl: UILabel!
   @IBOutlet weak var detailIMG: UIImageView!
   @IBOutlet weak var chartView: BarChartView!
+  
+  var modifyDate:NSDate?
+  var modifyPrice: String?
   
   weak var asixFormatDelegate: IAxisValueFormatter?
   
@@ -71,7 +77,7 @@ class DetailViewController: UIViewController {
     
   }
   
-  @objc func modifyBtnPressed( _: UIBarButtonItem) {
+  @objc func modifyBtnPressed( _: UIBarButtonItem){
     print("barbtnPressed")
 //    let alertCon = UIAlertController(title: "Please Input Product Information", message: "Information Modify", preferredStyle: .alert)
 //    let txtFld = alertCon.textFields
@@ -96,7 +102,7 @@ class DetailViewController: UIViewController {
 //    alertCon.addAction(alertCancel)
 //    self.present(alertCon, animated: true, completion: nil)
     let popUpView = UIView()
-    let nameTxtFd = UITextField()
+    let currentTimeTxtFd = UITextField()
     let priceTxtFd = UITextField()
     let notiLbl = UILabel()
     let modifyBtn = UIButton()
@@ -115,32 +121,41 @@ class DetailViewController: UIViewController {
     notiLbl.backgroundColor = .lightGray
     notiLbl.frame = CGRect(x: 10, y: 10, width: 280, height: 40)
     
-    nameTxtFd.placeholder = "Name"
-    nameTxtFd.textAlignment = .center
-    nameTxtFd.backgroundColor = .brown
-    nameTxtFd.frame = CGRect(x: 50, y: 60, width: 200, height: 50)
+    let currentTime = NSDate()
+    let formatter = DateFormatter()
+    formatter.dateFormat = "dd.mm.yyyy"
+    
+    currentTimeTxtFd.placeholder = "\(formatter.string(from: currentTime as Date))"
+    currentTimeTxtFd.textAlignment = .center
+    currentTimeTxtFd.backgroundColor = .brown
+    currentTimeTxtFd.frame = CGRect(x: 50, y: 60, width: 200, height: 50)
+    let dateFromStr = formatter.date(from: (currentTimeTxtFd.text ?? currentTimeTxtFd.placeholder)!)
     
     priceTxtFd.placeholder = "Price"
     priceTxtFd.textAlignment = .center
     priceTxtFd.backgroundColor = .brown
     priceTxtFd.frame = CGRect(x: 50, y: 110, width: 200, height: 50)
+    modifyPrice = priceTxtFd.text
+    print(modifyPrice)
     
-    modifyBtn.titleLabel?.text = "Modify"
+    modifyBtn.setTitle("Modify", for: .normal)
     modifyBtn.titleLabel?.textAlignment = .center
-    modifyBtn.titleLabel?.textColor = .black
-    modifyBtn.backgroundColor = .orange
+    modifyBtn.setTitleColor(.black, for: .normal)
+    modifyBtn.backgroundColor = .white
     modifyBtn.frame = CGRect(x: 60, y: 170, width: 80, height: 50)
-    modifyBtn.addTarget(self, action: #selector(modifyPressed(_:)), for: .touchUpInside)
+    modifyBtn.addTarget(self, action: #selector(modifyPressed(sender:)), for: .touchUpInside)
     
-    cancelBtn.titleLabel?.text = "Cancel"
+    
+    cancelBtn.setTitle("Cancel", for: .normal)
     cancelBtn.titleLabel?.textAlignment = .center
-    cancelBtn.titleLabel?.textColor = .black
-    cancelBtn.backgroundColor = .orange
+    cancelBtn.backgroundColor = .white
+    cancelBtn.setTitleColor(.black, for: .normal)
     cancelBtn.frame = CGRect(x: 160, y: 170, width: 80, height: 50)
     cancelBtn.addTarget(self, action: #selector(cancelPressed(_:)), for: .touchUpInside)
     
+    
     popUpView.addSubview(notiLbl)
-    popUpView.addSubview(nameTxtFd)
+    popUpView.addSubview(currentTimeTxtFd)
     popUpView.addSubview(priceTxtFd)
     popUpView.addSubview(modifyBtn)
     popUpView.addSubview(cancelBtn)
@@ -148,12 +163,31 @@ class DetailViewController: UIViewController {
     self.view.addSubview(popUpView)
   }
   
-  @objc func modifyPressed( _:UIButton) {
+  @objc func modifyPressed(sender: UIButton) {
     print("modify Pressed")
+    sender.setTitleColor(.green, for: .highlighted)
+    if (modifyPrice != nil){
+      print("Ready To Update")
+      var dateArr:[String] = []
+      var priceArr:[String] = []
+      
+      Firestore.firestore().collection("Market Price").getDocuments {
+        (snap, error) in
+        if error != nil {
+          print("\(error?.localizedDescription as Any)")
+        }
+        
+      }
+      
+    } else {
+      print("modify Price and Date is nil")
+    }
+    
   }
   
   @objc func cancelPressed( _: UIButton) {
     print("Cancel Pressed")
+    dismiss(animated: true, completion: nil)
   }
   
   func setChart(dataPoints: [String], values: [Double]) {

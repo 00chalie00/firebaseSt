@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
   
   private func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]? = [:]) -> Bool {
-    UIApplication.shared.statusBarStyle = .lightContent
+    //UIApplication.shared.statusBarStyle = .lightContent
     return true
   }
 
