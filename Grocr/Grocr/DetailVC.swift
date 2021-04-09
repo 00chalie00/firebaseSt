@@ -15,8 +15,28 @@ class DetailViewController: UIViewController {
   var name: String?
   var price: String?
   var priceS: [String]?
-  var currentDate: [NSDate]?
+  var currentDate: [String]?
   var productIMG: UIImage = UIImage()
+  var dayArr: [String]?
+  
+  //coded Pop Up
+  let popUpView = UIView()
+  let currentTimeTxtFd = UITextField()
+  let priceTxtFd = UITextField()
+  let notiLbl = UILabel()
+  let modifyBtn = UIButton()
+  let cancelBtn = UIButton()
+  
+  
+  //    let currentTime = NSDate()
+  //    let formatter = DateFormatter()
+  //    formatter.dateFormat = "dd.mm.yyyy"
+  //
+  //    currentTimeTxtFd.placeholder = "\(formatter.string(from: currentTime as Date))"
+  let date = Date()
+  let cal = Calendar.current
+  //    let hour = cal.component(.hour, from: date)
+  //    let min = cal.component(.minute, from: date)
   
   var storageRef = Storage.storage().reference(withPath: "Market Price")
   
@@ -29,9 +49,7 @@ class DetailViewController: UIViewController {
   @IBOutlet weak var priceLbl: UILabel!
   @IBOutlet weak var detailIMG: UIImageView!
   @IBOutlet weak var chartView: BarChartView!
-  
-  var modifyDate:NSDate?
-  var modifyPrice: String?
+  @IBOutlet weak var monthLbl: UILabel!
   
   weak var asixFormatDelegate: IAxisValueFormatter?
   
@@ -50,7 +68,13 @@ class DetailViewController: UIViewController {
     priceLbl.text = numberFormat.string(for: Int(price!))
     detailIMG.image = productIMG
     
-    months = createItem(objectArr: priceS!, time: currentDate!)
+    let dayLast = currentDate?.last
+    let startDay = dayLast?.index(dayLast!.startIndex, offsetBy: 0)
+    let endDay = dayLast?.index(dayLast!.startIndex, offsetBy: 6)
+    let returnDay = String(dayLast![startDay!...endDay!])
+    monthLbl.text = "\(returnDay)월"
+    
+    months = createItem(objectArr: priceS!, time: dayArr!)
     print(months)
     
     chartView.animate(yAxisDuration: 2.0)
@@ -79,34 +103,28 @@ class DetailViewController: UIViewController {
   
   @objc func modifyBtnPressed( _: UIBarButtonItem){
     print("barbtnPressed")
-//    let alertCon = UIAlertController(title: "Please Input Product Information", message: "Information Modify", preferredStyle: .alert)
-//    let txtFld = alertCon.textFields
-//    let alertModify = UIAlertAction(title: "Confirm Modify", style: .default) {
-//      modify in
-//      let modifyDate = txtFld?[0].text
-//      let modifyPrice = txtFld?[1].text
-//    }
-//    let alertCancel = UIAlertAction(title: "Cancel", style: .default) {
-//      cancel in
-//      self.dismiss(animated: true, completion: nil)
-//    }
-//
-//    alertCon.addTextField { txtFld in
-//      txtFld.placeholder = "Date"
-//    }
-//    alertCon.addTextField { txtFld in
-//      txtFld.placeholder = "Price"
-//    }
-//
-//    alertCon.addAction(alertModify)
-//    alertCon.addAction(alertCancel)
-//    self.present(alertCon, animated: true, completion: nil)
-    let popUpView = UIView()
-    let currentTimeTxtFd = UITextField()
-    let priceTxtFd = UITextField()
-    let notiLbl = UILabel()
-    let modifyBtn = UIButton()
-    let cancelBtn = UIButton()
+    //    let alertCon = UIAlertController(title: "Please Input Product Information", message: "Information Modify", preferredStyle: .alert)
+    //    let txtFld = alertCon.textFields
+    //    let alertModify = UIAlertAction(title: "Confirm Modify", style: .default) {
+    //      modify in
+    //      let modifyDate = txtFld?[0].text
+    //      let modifyPrice = txtFld?[1].text
+    //    }
+    //    let alertCancel = UIAlertAction(title: "Cancel", style: .default) {
+    //      cancel in
+    //      self.dismiss(animated: true, completion: nil)
+    //    }
+    //
+    //    alertCon.addTextField { txtFld in
+    //      txtFld.placeholder = "Date"
+    //    }
+    //    alertCon.addTextField { txtFld in
+    //      txtFld.placeholder = "Price"
+    //    }
+    //
+    //    alertCon.addAction(alertModify)
+    //    alertCon.addAction(alertCancel)
+    //    self.present(alertCon, animated: true, completion: nil)
     
     let width: CGFloat = 300
     let height: CGFloat = 240
@@ -121,22 +139,20 @@ class DetailViewController: UIViewController {
     notiLbl.backgroundColor = .lightGray
     notiLbl.frame = CGRect(x: 10, y: 10, width: 280, height: 40)
     
-    let currentTime = NSDate()
-    let formatter = DateFormatter()
-    formatter.dateFormat = "dd.mm.yyyy"
+    let year = cal.component(.year, from: date)
+    let month = cal.component(.month, from: date)
+    let day = cal.component(.day, from: date)
     
-    currentTimeTxtFd.placeholder = "\(formatter.string(from: currentTime as Date))"
+    currentTimeTxtFd.placeholder = "\(year).\(month).\(day)"
     currentTimeTxtFd.textAlignment = .center
     currentTimeTxtFd.backgroundColor = .brown
     currentTimeTxtFd.frame = CGRect(x: 50, y: 60, width: 200, height: 50)
-    let dateFromStr = formatter.date(from: (currentTimeTxtFd.text ?? currentTimeTxtFd.placeholder)!)
+    //let dateFromStr = formatter.date(from: (currentTimeTxtFd.text ?? currentTimeTxtFd.placeholder)!)
     
     priceTxtFd.placeholder = "Price"
     priceTxtFd.textAlignment = .center
     priceTxtFd.backgroundColor = .brown
     priceTxtFd.frame = CGRect(x: 50, y: 110, width: 200, height: 50)
-    modifyPrice = priceTxtFd.text
-    print(modifyPrice)
     
     modifyBtn.setTitle("Modify", for: .normal)
     modifyBtn.titleLabel?.textAlignment = .center
@@ -166,23 +182,36 @@ class DetailViewController: UIViewController {
   @objc func modifyPressed(sender: UIButton) {
     print("modify Pressed")
     sender.setTitleColor(.green, for: .highlighted)
-    if (modifyPrice != nil){
-      print("Ready To Update")
-      var dateArr:[String] = []
-      var priceArr:[String] = []
-      
-      Firestore.firestore().collection("Market Price").getDocuments {
-        (snap, error) in
+    if (priceTxtFd.text != nil){
+      var returnItem: [GroceryItem] = []
+      Firestore.firestore().collection("Market Price").getDocuments(completion: {
+        snapshot, error in
         if error != nil {
-          print("\(error?.localizedDescription as Any)")
+          print(error?.localizedDescription as Any)
+        }
+        if let dnData = snapshot {
+          let convertData = dnData.documents
+          for i in 0..<convertData.count {
+            returnItem.append(GroceryItem(document: convertData[i]))
+          }
+          let priceRef = Firestore.firestore().collection("Market Price").document("\(returnItem[0].key)")
+          priceRef.updateData(["price": FieldValue.arrayUnion(["\(String(describing: self.priceTxtFd.text!))"])])
+          
+          if self.currentTimeTxtFd.text == "" {
+            self.currentTimeTxtFd.text = self.currentTimeTxtFd.placeholder!
+            priceRef.updateData(["Current Date": FieldValue.arrayUnion(["\(String(describing: self.currentTimeTxtFd.text!))"])])
+          } else {
+            priceRef.updateData(["Current Date": FieldValue.arrayUnion(["\(String(describing: self.currentTimeTxtFd.text!))"])])
+          }
         }
         
-      }
-      
-    } else {
-      print("modify Price and Date is nil")
+      })
     }
-    
+    // self.dismiss(animated: true, completion: nil)
+    let presentingVC = self.presentingViewController
+    self.dismiss(animated: true) {
+      presentingVC?.navigationController?.popViewController(animated: false)
+    }
   }
   
   @objc func cancelPressed( _: UIButton) {
@@ -206,21 +235,22 @@ class DetailViewController: UIViewController {
     xAxisValue.valueFormatter = asixFormatDelegate
   }
   
-  func createItem(objectArr :[Any], time: [NSDate]) -> [String] {
+  func createItem(objectArr :[Any], time: [String]) -> [String] {
     var stringArr:[String] = []
     for i in 0..<objectArr.count {
-      let format = DateFormatter()
-      //format.dateFormat = "dd.mm"
-      format.dateStyle = .short
-      let resultTime = format.string(from: time[i] as Date)
+      //      let format = DateFormatter()
+      //      //format.dateFormat = "dd.mm"
+      //      format.dateStyle = .short
+      //      let resultTime = format.string(from: time[i] as Date)
+      let resultTime = time[i]
       
-      let combineStr = "\(i + 1)\(resultTime)"
+      let combineStr = "\(resultTime)"
       print(combineStr)
       stringArr.append(combineStr)
     }
     return stringArr
   }
-   
+  
 }//End Of The Class
 
 
@@ -231,3 +261,5 @@ extension DetailViewController: IAxisValueFormatter {
     return months[Int(value)]
   }
 }
+
+

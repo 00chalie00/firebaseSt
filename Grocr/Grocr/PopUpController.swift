@@ -121,7 +121,7 @@ class PopUController: UIViewController {
             let price_Time = NSDate()
             let formatter = DateFormatter()
             formatter.dateFormat = "dd.mm.yyyy"
-            let result = formatter.string(from: price_Time as Date)
+            let result: [String] = [formatter.string(from: price_Time as Date)]
             uploadDoc.updateValue(result, forKey: "Current Date")
             Firestore.firestore().collection("Market Price").document().setData(uploadDoc) {
               error in

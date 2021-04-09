@@ -5,14 +5,14 @@ struct GroceryItem {
   let key: String
   let image: String?
   let productName: String?
-  let price: [String?]
+  var price: [String?]
   let describe: String?
   let complete: Bool?
   let priceCount: Int?
-  let currentDate: [NSDate?]
+  var currentDate: [String?]
   let ref: DatabaseReference?
   
-  init(key: String = "", image: String, name: String, price: [String], describe: String, complete: Bool, priceCount: Int, currentDate: [NSDate]) {
+  init(key: String = "", image: String, name: String, price: [String], describe: String, complete: Bool, priceCount: Int, currentDate: [String]) {
     self.key = key
     self.image = image
     self.productName = name
@@ -33,7 +33,7 @@ struct GroceryItem {
     self.describe = snapshotValue["desc"] as? String
     self.complete = snapshotValue["complete"] as? Bool
     self.priceCount = snapshotValue["PriceCount"] as? Int
-    self.currentDate = (snapshotValue["Current Date"] as? [NSDate])!
+    self.currentDate = (snapshotValue["Current Date"] as? [String])!
     self.ref = snapshot.ref
   }
   
@@ -47,9 +47,12 @@ struct GroceryItem {
     self.describe = dataDic["desc"] as? String
     self.complete = dataDic["complete"] as? Bool
     self.priceCount = dataDic["PriceCount"] as? Int
-    self.currentDate = dataDic["Current Date"] as? [NSDate] ?? [NSDate()]
+    self.currentDate = dataDic["Current Date"] as? [String] ?? [String()]
     self.ref = nil
-    
+  }
+  
+  mutating func addPrice(price: String) {
+    self.price.append(price)
   }
   
 //  func toAnyObject() -> Any {
@@ -58,7 +61,7 @@ struct GroceryItem {
 //      "produceName": productName,
 //      "price": price,
 //      "describe": describe,
-//      "complete": complete
+//      "complete": completeaz
 //    ]
 //  }
   

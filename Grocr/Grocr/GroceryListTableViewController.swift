@@ -10,6 +10,7 @@ class GroceryListTableViewController: UITableViewController {
   var items: [GroceryItem] = []
   var currentData:[String:Any] = [:]
   var currentImg: UIImage?
+  var returnDayArr:[String] = []
   
   var user: User!
   var userCountBarButtonItem: UIBarButtonItem!
@@ -99,7 +100,41 @@ class GroceryListTableViewController: UITableViewController {
           returnItem.append(GroceryItem(document: convertData[i]))
         }
         self.items = returnItem
-        print(returnItem)
+        for i in 0..<self.items.count {
+          var compareDate = self.items[i].currentDate
+          var comparePrice = self.items[i].price
+          if self.items[i].price.count > self.items[i].currentDate.count {
+            print("price is more")
+            let loopCount = self.items[i].price.count - self.items[i].currentDate.count
+            for _ in 0..<loopCount {
+              let lastDate = self.items[i].currentDate.last
+              compareDate.append(lastDate!!)
+              returnItem[i].currentDate = compareDate
+              print(self.items[i].currentDate)
+            }
+            //self.returnDayArr = self.getDays(days: self.items[i].currentDate)
+            self.items = returnItem
+            print(self.items)
+          } else if self.items[i].price.count < self.items[i].currentDate.count  {
+            print("date is more")
+            let loopCount = self.items[i].currentDate.count - self.items[i].price.count
+            for _ in 0..<loopCount {
+              let lastPrice = self.items[i].price.last
+              comparePrice.append(lastPrice!!)
+              returnItem[i].price = comparePrice
+              print(self.items[i].currentDate)
+            }
+            //self.returnDayArr = self.getDays(days: self.items[i].currentDate)
+            self.items = returnItem
+            print(self.items)
+          } else if self.items[i].price.count == self.items[i].currentDate.count {
+            print("equal")
+            self.items = returnItem
+            print(self.items[i].currentDate)
+            //self.returnDayArr = self.getDays(days: self.items[i].currentDate)
+            print(self.items)
+          }
+        }
         self.tableView.reloadData()
       }
       self.loadScreen.spinnerOff()
@@ -117,7 +152,17 @@ class GroceryListTableViewController: UITableViewController {
     })
   }
   
-
+  func getDays(days: [String?]) -> [String] {
+    var dayArr:[String] = []
+    for i in 0..<days.count {
+      let dayStr = days[i]
+      let startDay = dayStr!.index(dayStr!.startIndex, offsetBy: 8)
+      let endDay = dayStr!.index(dayStr!.startIndex, offsetBy: 9)
+      let returnDay = String(dayStr![startDay...endDay])
+      dayArr.append(returnDay)
+    }
+    return dayArr
+  }
   
   @IBAction func itemIMGSetting(_ sender: UIButton) {
     print("pushed Img Btn")
@@ -162,10 +207,13 @@ class GroceryListTableViewController: UITableViewController {
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    print("did select")
     let indexData = items[indexPath.row]
     currentData = ["Name": indexData.productName!, "Price": indexData.price, "LastPrice": indexData.price.last!!, "Current Date": indexData.currentDate]
     guard let cell = tableView.cellForRow(at: indexPath) as? CellController else { return }
     currentImg = cell.img.image
+    
+    self.returnDayArr = self.getDays(days: indexData.currentDate)
     
     performSegue(withIdentifier: "DetailVC", sender: nil)
   }
@@ -175,8 +223,15 @@ class GroceryListTableViewController: UITableViewController {
     let destinationVC = segue.destination as! DetailViewController
     destinationVC.name = currentData["Name"] as? String
     destinationVC.price = currentData["LastPrice"] as? String
+    //    destinationVC.priceS = currentData["Price"] as? [String]
+    //    destinationVC.currentDate = currentData["Current Date"] as? [String]
+    
+    print((currentData["Price"] as? [String])!.count)
+    print((currentData["Current Date"] as? [String])!.count)
+    
     destinationVC.priceS = currentData["Price"] as? [String]
-    destinationVC.currentDate = currentData["Current Date"] as? [NSDate]
+    destinationVC.currentDate = currentData["Current Date"] as? [String]
+    destinationVC.dayArr = returnDayArr
     destinationVC.productIMG = currentImg!
   }
   
