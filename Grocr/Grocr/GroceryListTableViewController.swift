@@ -44,16 +44,49 @@ class GroceryListTableViewController: UITableViewController {
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
+    print("will")
   }
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-
+    print("did")
   }
   
   @objc func refresh() {
     self.items = []
+    
+    let loadView = UIView()
+    let loadLabel = UILabel()
+    let spinner = UIActivityIndicatorView()
+    
+    print("Start Spinner")
+    
+    let width: CGFloat = 230
+    let height: CGFloat = 30
+    let x = (tableView.frame.width / 2) - (width / 2)
+    let y = (tableView.frame.height / 2) - (height / 2)
+    loadView.frame = CGRect(x: 0, y: 0, width: width, height: height)
+    loadView.backgroundColor = .lightGray
+    
+    loadLabel.text = "Loading Please Wait"
+    loadLabel.textColor = .black
+    loadLabel.textAlignment = .center
+    loadLabel.frame = CGRect(x: 30, y: 0, width: 200, height: 30)
+    
+    spinner.style = .medium
+    spinner.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+    spinner.startAnimating()
+    
+    loadView.addSubview(loadLabel)
+    loadView.addSubview(spinner)
+    
+    tableView.addSubview(loadView)
     queryforServer()
+    
+    spinner.stopAnimating()
+    spinner.isHidden = true
+    loadView.isHidden = true
+    
     print("NOTI")
   }
   
@@ -86,8 +119,8 @@ class GroceryListTableViewController: UITableViewController {
     print("Called Query Func")
     var returnItem: [GroceryItem] = []
     
-    loadScreen.setLoadingScreen(uiView: tableView)
     tableView.reloadData()
+    loadScreen.setLoadingScreen(uiView: tableView)
     
     Firestore.firestore().collection("Market Price").getDocuments(completion: {
       snapshot, error in
@@ -110,11 +143,9 @@ class GroceryListTableViewController: UITableViewController {
               let lastDate = self.items[i].currentDate.last
               compareDate.append(lastDate!!)
               returnItem[i].currentDate = compareDate
-              print(self.items[i].currentDate)
             }
             //self.returnDayArr = self.getDays(days: self.items[i].currentDate)
             self.items = returnItem
-            print(self.items)
           } else if self.items[i].price.count < self.items[i].currentDate.count  {
             print("date is more")
             let loopCount = self.items[i].currentDate.count - self.items[i].price.count
@@ -122,22 +153,18 @@ class GroceryListTableViewController: UITableViewController {
               let lastPrice = self.items[i].price.last
               comparePrice.append(lastPrice!!)
               returnItem[i].price = comparePrice
-              print(self.items[i].currentDate)
             }
             //self.returnDayArr = self.getDays(days: self.items[i].currentDate)
             self.items = returnItem
-            print(self.items)
           } else if self.items[i].price.count == self.items[i].currentDate.count {
             print("equal")
             self.items = returnItem
-            print(self.items[i].currentDate)
             //self.returnDayArr = self.getDays(days: self.items[i].currentDate)
-            print(self.items)
           }
         }
+        self.loadScreen.spinnerOff()
         self.tableView.reloadData()
       }
-      self.loadScreen.spinnerOff()
       // Query from RealTime DB
       //    childRefer.queryOrdered(byChild: childName).observe(.value) {
       //      (dataSnapshot) in
@@ -161,6 +188,7 @@ class GroceryListTableViewController: UITableViewController {
       let returnDay = String(dayStr![startDay...endDay])
       dayArr.append(returnDay)
     }
+    print("TVC")
     return dayArr
   }
   
@@ -233,11 +261,25 @@ class GroceryListTableViewController: UITableViewController {
     destinationVC.currentDate = currentData["Current Date"] as? [String]
     destinationVC.dayArr = returnDayArr
     destinationVC.productIMG = currentImg!
+    //let text = tableView.indexPathForSelectedRow
+    destinationVC.indexPathInt = tableView.indexPathForSelectedRow!
+    print("IndexPath.Row \(String(describing: tableView.indexPathForSelectedRow))")
   }
   
   override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
     let deleteAC = UIContextualAction(style: .normal, title: "Delete") { (action, view, complionHalder) in
       print("Swipe Delete")
+      let deletItem = self.items[indexPath.row]
+      Firestore.firestore().collection("Market Price").document(deletItem.key).delete {
+        error in
+        if error != nil {
+          print(error?.localizedDescription as Any)
+        }
+        self.items.remove(at: indexPath.row)
+        self.queryforServer()
+      }
+      
+      
       complionHalder(true)
     }
 //    let updateAC = UIContextualAction(style: .destructive, title: "Update") { (action, view, completionHalder) in

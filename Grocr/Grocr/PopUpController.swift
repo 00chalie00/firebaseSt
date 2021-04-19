@@ -18,6 +18,7 @@ class PopUController: UIViewController {
   var user: User!
   var tempIMG: UIImageView?
   var uiVC: UIVC = UIVC()
+  let spinView = UIView()
   
   var firebaseRef = Database.database().reference()
   var childRef = Database.database().reference(withPath: "Market Price")
@@ -88,7 +89,20 @@ class PopUController: UIViewController {
   
   @IBAction func updateBtnPressed(_ sender: UIButton) {
     print("update BTN Pressed")
-    uiVC.setLoadingScreen(uiView: self.view)
+    
+    //self.productTxtFLD.isHidden = true
+    let width: CGFloat = 460
+    let height: CGFloat = 60
+//    let width = self.productTxtFLD.frame.width / 2
+//    let height = self.productTxtFLD.frame.height / 2
+    let x = (productTxtFLD.frame.width / 2) - (width / 2)
+    let y = (productTxtFLD.frame.height / 2) - (height / 2)
+    spinView.frame = CGRect(x: x, y: y, width: width, height: height)
+    productTxtFLD.addSubview(spinView)
+    uiVC.setLoadingScreen(uiView: spinView)
+    
+    self.view.setNeedsLayout()
+    self.view.layoutIfNeeded()
     
     let name = productName.text
     let price = productPrice.text
@@ -120,8 +134,9 @@ class PopUController: UIViewController {
             //Check The Current Time
             let price_Time = NSDate()
             let formatter = DateFormatter()
-            formatter.dateFormat = "dd.mm.yyyy"
+            formatter.dateFormat = "yyyy.MM.dd"
             let result: [String] = [formatter.string(from: price_Time as Date)]
+            print(result)
             uploadDoc.updateValue(result, forKey: "Current Date")
             Firestore.firestore().collection("Market Price").document().setData(uploadDoc) {
               error in
@@ -137,7 +152,6 @@ class PopUController: UIViewController {
         }
       }
     }
-    uiVC.spinnerOff()
     
     if (self.productName.isFirstResponder || self.productPrice.isFirstResponder || self.productTxtFLD.isFirstResponder) {
       self.productName.resignFirstResponder()
@@ -145,7 +159,6 @@ class PopUController: UIViewController {
       self.productTxtFLD.resignFirstResponder()
     }
   }
-  
 }//End Of The Class
 
 

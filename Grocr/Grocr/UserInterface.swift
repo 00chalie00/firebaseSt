@@ -25,6 +25,7 @@ class UIVC {
     loadView.frame = CGRect(x: x, y: y, width: width, height: height)
     
     loadLabel.text = "Loading Please Wait"
+    loadLabel.textColor = .black
     loadLabel.textAlignment = .center
     loadLabel.frame = CGRect(x: 30, y: 0, width: 200, height: 30)
     

@@ -18,6 +18,7 @@ class DetailViewController: UIViewController {
   var currentDate: [String]?
   var productIMG: UIImage = UIImage()
   var dayArr: [String]?
+  var indexPathInt: IndexPath?
   
   //coded Pop Up
   let popUpView = UIView()
@@ -75,7 +76,6 @@ class DetailViewController: UIViewController {
     monthLbl.text = "\(returnDay)월"
     
     months = createItem(objectArr: priceS!, time: dayArr!)
-    print(months)
     
     chartView.animate(yAxisDuration: 2.0)
     chartView.pinchZoomEnabled = false
@@ -83,12 +83,13 @@ class DetailViewController: UIViewController {
     chartView.drawBordersEnabled = true
     
     var doublePrice:[Double] = []
-    print(priceS as Any)
     for i in 0..<priceS!.count {
       doublePrice.append(Double(priceS![i])!)
     }
     
     setChart(dataPoints: months, values: doublePrice)
+    print("viewdid Index: \(indexPathInt)")
+    print("viewdid Index: \(indexPathInt)")
   }
   
   override func viewDidAppear(_ animated: Bool) {
@@ -139,11 +140,14 @@ class DetailViewController: UIViewController {
     notiLbl.backgroundColor = .lightGray
     notiLbl.frame = CGRect(x: 10, y: 10, width: 280, height: 40)
     
-    let year = cal.component(.year, from: date)
-    let month = cal.component(.month, from: date)
-    let day = cal.component(.day, from: date)
+//    let year = cal.component(.year, from: date)
+//    let month = cal.component(.month, from: date)
+//    let day = cal.component(.day, from: date)
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy.MM.dd"
     
-    currentTimeTxtFd.placeholder = "\(year).\(month).\(day)"
+//    currentTimeTxtFd.placeholder = "\(year).\(month).\(day)"
+    currentTimeTxtFd.placeholder = "\(formatter.string(from: date as Date))"
     currentTimeTxtFd.textAlignment = .center
     currentTimeTxtFd.backgroundColor = .brown
     currentTimeTxtFd.frame = CGRect(x: 50, y: 60, width: 200, height: 50)
@@ -194,7 +198,10 @@ class DetailViewController: UIViewController {
           for i in 0..<convertData.count {
             returnItem.append(GroceryItem(document: convertData[i]))
           }
-          let priceRef = Firestore.firestore().collection("Market Price").document("\(returnItem[0].key)")
+          print("indexRow = \(self.indexPathInt![1])")
+          let indexRow = self.indexPathInt![1]
+          let priceRef = Firestore.firestore().collection("Market Price").document("\(returnItem[indexRow].key)")
+          print("KEy = \(returnItem[indexRow].key)")
           priceRef.updateData(["price": FieldValue.arrayUnion(["\(String(describing: self.priceTxtFd.text!))"])])
           
           if self.currentTimeTxtFd.text == "" {
@@ -204,7 +211,6 @@ class DetailViewController: UIViewController {
             priceRef.updateData(["Current Date": FieldValue.arrayUnion(["\(String(describing: self.currentTimeTxtFd.text!))"])])
           }
         }
-        
       })
     }
     // self.dismiss(animated: true, completion: nil)
